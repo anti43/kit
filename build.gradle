@@ -62,8 +62,7 @@ dependencies {
 
 
 
-    //
-    runtime 'org.postgresql:postgresql:9.4.1211.jre7'
+    // 
     compile "org.grails.plugins:jasypt-encryption:2.0.2"
     compile 'org.grails.plugins:spring-security-core:3.2.0'
 }
