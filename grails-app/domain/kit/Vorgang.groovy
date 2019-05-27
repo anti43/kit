@@ -9,7 +9,9 @@ class Vorgang {
     Date lastUpdated
 
     String bezeichnung
-    String beschreibung, bemerkungen, begründung
+    String beschreibung, bemerkungen, begründung, vorschlagVon
+    Boolean oeffentlich = false
+    Boolean initiatorVerstecken = false
     Mandant mandant
 
 
@@ -31,6 +33,9 @@ class Vorgang {
         bezeichnung()
         beschreibung widget: 'textarea', nullable: true
         bemerkungen widget: 'textarea', nullable: true
+        vorschlagVon widget: 'textarea', nullable: true
+        oeffentlich()
+        initiatorVerstecken()
 
         antragEingereichtAm nullable: true
         antragAbgelehntAm nullable: true
@@ -42,6 +47,7 @@ class Vorgang {
         mandant display: false
         bilder()
         ortstermine()
+
     }
 
     static mapping = {
