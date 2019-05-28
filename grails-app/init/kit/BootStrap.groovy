@@ -15,7 +15,7 @@ class BootStrap {
 
         if(!Benutzer.findByUsername('admin')){
             Mandant a = new Mandant()
-            a.displayName = "Admin"
+            a.displayName = "Administrativer Benutzer"
             a.save(flush: true, failOnError: true)
 
             Benutzer b = new Benutzer()
@@ -35,17 +35,25 @@ class BootStrap {
             bn2.save(flush: true, failOnError: true)
         }
 
-        if (Mandant.count == 1) {
-            Mandant.withNewTransaction {
-                3.times {
-                    Mandant a = new Mandant()
-                    a.displayName = "mandant$it"
-                    a.save(flush: true, failOnError: true)
+        if(Mandant.count==1){
+            ["Grüne OV Perl", "Ortsrat Besch"].each{
+                Mandant a = new Mandant()
+                a.displayName = "$it"
+                a.logo = "https://upload.wikimedia.org/wikipedia/commons/5/51/B%C3%BCndnis_90_-_Die_Gr%C3%BCnen_Logo_%28transparent%29.svg"//"""https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Wappen_Besch.svg/1280px-Wappen_Besch.svg.png"
+                a.save(flush: true, failOnError: true)
 
-                    a.createBenutzer("user$it", 'password')
+                a.createBenutzer("$it", 'RandomPassowrd1')
+            }
+        }
+
+        if (VorgangsKategorie.count == 0) {
+            VorgangsKategorie.withNewTransaction {
+                ["Umweltschutz","Verkehr","Infrastruktur"].each {
+                    VorgangsKategorie a = new VorgangsKategorie()
+                    a.name = "$it"
+                    a.save(flush: true, failOnError: true)
                 }
             }
-
         }
     }
     def destroy = {

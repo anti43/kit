@@ -15,14 +15,24 @@ class VorgangController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
+    def suche() {
+        params.max = Math.min(params.max ?: 10, 100)
+        String q = params.remove('q')
+        def x = Vorgang.findAllByBezeichnungRlikeAndOeffentlich(q, true, params)
+        def y = Vorgang.findAllByBeschreibungRlikeAndOeffentlich(q, true, params)
+        def z = (x + y).sort { it.lastUpdated.time }.reverse()
+        flash.message = "Ergebnis für Suchwort '$q'"
+        respond z, model: [vorgangCount: z.size()]
+    }
+
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond vorgangService.list(params), model:[vorgangCount: vorgangService.count()]
+        respond vorgangService.list(params), model: [vorgangCount: vorgangService.count()]
     }
 
     def show(Long id) {
-        //respond vorgangService.get(id)
-        redirect action: 'edit', id: id
+        def x =  vorgangService.get(id)
+        respond x
     }
 
     def create() {
@@ -39,7 +49,7 @@ class VorgangController {
             vorgang.mandant = vorgang.getCurrentMandant()
             vorgangService.save(vorgang)
         } catch (ValidationException e) {
-            respond vorgang.errors, view:'create'
+            respond vorgang.errors, view: 'create'
             return
         }
 
@@ -65,7 +75,7 @@ class VorgangController {
         try {
             vorgangService.save(vorgang)
         } catch (ValidationException e) {
-            respond vorgang.errors, view:'edit'
+            respond vorgang.errors, view: 'edit'
             return
         }
 
@@ -74,7 +84,7 @@ class VorgangController {
                 flash.message = message(code: 'default.updated.message', args: [message(code: 'vorgang.label', default: 'Vorgang'), vorgang.id])
                 redirect vorgang
             }
-            '*'{ respond vorgang, [status: OK] }
+            '*' { respond vorgang, [status: OK] }
         }
     }
 
@@ -89,9 +99,9 @@ class VorgangController {
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.deleted.message', args: [message(code: 'vorgang.label', default: 'Vorgang'), id])
-                redirect action:"index", method:"GET"
+                redirect action: "index", method: "GET"
             }
-            '*'{ render status: NO_CONTENT }
+            '*' { render status: NO_CONTENT }
         }
     }
 
@@ -113,7 +123,7 @@ class VorgangController {
 
         vorgang.addImage(file)
 
-        render (['file': file.name] as JSON)
+        render(['file': file.name] as JSON)
     }
 
     protected void notFound() {
@@ -122,7 +132,7 @@ class VorgangController {
                 flash.message = message(code: 'default.not.found.message', args: [message(code: 'vorgang.label', default: 'Vorgang'), params.id])
                 redirect action: "index", method: "GET"
             }
-            '*'{ render status: NOT_FOUND }
+            '*' { render status: NOT_FOUND }
         }
     }
 }
@@ -132,11 +142,11 @@ class FeaturedImageCommand implements Validateable {
     Long id
 
     static constraints = {
-        featuredImageFile  validator: { val, obj ->
-            if ( val == null ) {
+        featuredImageFile validator: { val, obj ->
+            if (val == null) {
                 return false
             }
-            if ( val.empty ) {
+            if (val.empty) {
                 return false
             }
 

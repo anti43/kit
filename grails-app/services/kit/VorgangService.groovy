@@ -22,7 +22,6 @@ class VorgangService {
     void delete(Serializable id) {
         def a = get(id)
         a.bilder*.delete()
-        a.ortstermine*.delete()
         a.delete()
     }
 
@@ -30,9 +29,9 @@ class VorgangService {
         Benutzer benutzer = springSecurityService.currentUser as Benutzer
 
         if (!vorgang.mandant || vorgang.mandant == benutzer.mandant) {
-            log.info("Vorgang $vorgang bearbeitet am ${new Date()} von $benutzer:\n${vorgang.dirtyPropertyNames}")
 
-            return vorgang.save(flush: true, failOnError: true)
+            Vorgang v = vorgang.save(flush: true, failOnError: true)
+            return v
         }
         throw new RuntimeException("Mandant mismatch (${vorgang.mandant} vs ${benutzer.mandant})")
     }
