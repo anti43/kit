@@ -37,7 +37,7 @@
             </g:form>
             <input id="fileupload" type="file" name="featuredImageFile" data-url="/vorgang/uploadImage/${this.vorgang.id}">
             <script>
-                var y = $('a[href="/dateiAnhang/create?akte.id=${vorgang.id}"]');
+                var y = $('a[href="/dateiAnhang/create?vorgang.id=${vorgang.id}"]');
                 var x = $('#fileupload');
 
                 y.detach();

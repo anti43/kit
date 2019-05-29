@@ -18,7 +18,7 @@
             <g:if test="${flash.message}">
                 <div class="message" role="status">${flash.message}</div>
             </g:if>
-            <f:table collection="${vorgangList}" properties="bezeichnung,dateCreated,antragEingereichtAm,antragAngenommenAm,antragAbgelehntAm"/>
+            <f:table collection="${vorgangList}" properties="bezeichnung,dateCreated,antragEingereichtAm"/>
 
             <div class="pagination">
                 <g:paginate total="${vorgangCount ?: 0}" />

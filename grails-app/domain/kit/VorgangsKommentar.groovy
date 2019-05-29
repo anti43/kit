@@ -2,22 +2,20 @@ package kit
 
 import com.bloomhealthco.jasypt.GormEncryptedStringType
 
-class VorgangsLog {
+class VorgangsKommentar {
     Date dateCreated
 
+    String benutzer
     Vorgang vorgang
     String text
-    String benutzer
+    boolean veroeffentlicht = false
 
     static constraints = {
+        text widget: 'textarea', nullable: false
     }
 
     static mapping = {
-        text type: GormEncryptedStringType, sqlType: 'TEXT'
         benutzer type: GormEncryptedStringType
-    }
-
-    String toString(){
-        benutzer + ": " + text
+        text type: GormEncryptedStringType, sqlType: 'TEXT'
     }
 }

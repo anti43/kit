@@ -19,11 +19,10 @@
     <hr>
 
     <!-- Date/Time -->
-    <p>Zuletzt aktualisiert: ${(items?.first()?.lastUpdated?:new Date()).format('dd.MM.yyyy')}</p>
+    <p>Zuletzt aktualisiert: ${(items?.find()?.lastUpdated?:new Date()).format('dd.MM.yyyy')}</p>
 
     <hr>
-
-    <hr>
+    <p>Letzte Vorgänge:</p>
 
     <table>
         <thead>

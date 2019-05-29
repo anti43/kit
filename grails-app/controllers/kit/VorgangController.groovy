@@ -2,8 +2,10 @@ package kit
 
 import com.sun.javafx.collections.MappingChange
 import grails.converters.JSON
+import grails.plugin.springsecurity.SpringSecurityService
 import grails.validation.Validateable
 import grails.validation.ValidationException
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.multipart.MultipartFile
 
 import static org.springframework.http.HttpStatus.*
@@ -12,6 +14,7 @@ class VorgangController {
 
     VorgangService vorgangService
     ImageService imageService
+    SpringSecurityService springSecurityService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
@@ -35,6 +38,17 @@ class VorgangController {
         respond x
     }
 
+    def comment(){
+        String text = params.text
+        String name = params.name?:springSecurityService.currentUser.username
+        VorgangsKommentar k= new VorgangsKommentar()
+        k.benutzer = name
+        k.text = text
+        k.vorgang = Vorgang.get(params.id)
+        k.save(flush: true, failOnError: true)
+        redirect action: 'show', id: params.id
+    }
+
     def create() {
         respond new Vorgang(params)
     }
@@ -48,6 +62,13 @@ class VorgangController {
         try {
             vorgang.mandant = vorgang.getCurrentMandant()
             vorgangService.save(vorgang)
+            def benutzer = SecurityContextHolder.getContext().getAuthentication()?.name
+            String t = "erstellt"
+            VorgangsLog vl = new VorgangsLog()
+            vl.vorgang = vorgang
+            vl.text = t
+            vl.benutzer = benutzer as String
+            vl.save(flush: true, failOnError: true)
         } catch (ValidationException e) {
             respond vorgang.errors, view: 'create'
             return
@@ -73,6 +94,16 @@ class VorgangController {
         }
 
         try {
+            def x = vorgang.getChanges()
+            def benutzer = SecurityContextHolder.getContext().getAuthentication()?.name
+            if (x) {
+                String t = "bearbeitet:\n${x}"
+                VorgangsLog vl = new VorgangsLog()
+                vl.vorgang = vorgang
+                vl.text = t
+                vl.benutzer = benutzer as String
+                vl.save(flush: true, failOnError: true)
+            }
             vorgangService.save(vorgang)
         } catch (ValidationException e) {
             respond vorgang.errors, view: 'edit'

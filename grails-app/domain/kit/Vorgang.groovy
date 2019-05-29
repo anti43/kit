@@ -14,36 +14,17 @@ class Vorgang {
     Boolean initiatorVerstecken = false
     Mandant mandant
 
+    String status
+
 
     Date antragEingereichtAm
-    Date antragAngenommenAm
-    Date antragAbgelehntAm
+    Date antragEntschiedenAm
 
-    VorgangsKategorie vorgangsKategorie
 
-    static hasMany = [bilder: DateiAnhang]
+    static hasMany = [bilder: DateiAnhang, kategorien: VorgangsKategorie, ortschaften: Gemeindeteil]
 
-    def beforeInsert() {
-        mandant = getCurrentMandant()
-        def benutzer = SecurityContextHolder.getContext().getAuthentication()?.name
-        String t = "Vorgang $this erstellt von $benutzer"
-        VorgangsLog vl = new VorgangsLog()
-        vl.vorgang = this
-        vl.text = t
-        vl.save(flush: true, failOnError: true)
-    }
 
     def beforeUpdate() {
-
-        def x = getChanges()
-        def benutzer = SecurityContextHolder.getContext().getAuthentication()?.name
-        if (x) {
-            String t = "Vorgang $this bearbeitet von $benutzer:\n${x}"
-            VorgangsLog vl = new VorgangsLog()
-            vl.vorgang = this
-            vl.text = t
-            vl.save(flush: true, failOnError: true)
-        }
     }
 
     Mandant getCurrentMandant() {
@@ -52,16 +33,16 @@ class Vorgang {
 
     static constraints = {
         bezeichnung()
-        vorgangsKategorie nullable: true
         beschreibung widget: 'textarea', nullable: true
         bemerkungen widget: 'textarea', nullable: true
-        vorschlagVon widget: 'textarea', nullable: true
+        vorschlagVon nullable: true
         oeffentlich()
         initiatorVerstecken()
 
         antragEingereichtAm nullable: true
-        antragAbgelehntAm nullable: true
-        antragAngenommenAm nullable: true
+        antragEntschiedenAm nullable: true
+
+        status inList: ["Eingegangen", "Abgelehnt", "Angenommen", "Zuständigkeit unklar"]
 
         begründung widget: 'textarea', nullable: true
 
@@ -72,10 +53,11 @@ class Vorgang {
     }
 
     static mapping = {
-        bezeichnung type: GormEncryptedStringType
-        beschreibung type: GormEncryptedStringType
-        bemerkungen type: GormEncryptedStringType
-        begründung type: GormEncryptedStringType
+        bezeichnung type: GormEncryptedStringType, sqlType: 'TEXT'
+        beschreibung type: GormEncryptedStringType, sqlType: 'TEXT'
+        bemerkungen type: GormEncryptedStringType, sqlType: 'TEXT'
+        begründung type: GormEncryptedStringType, sqlType: 'TEXT'
+        vorschlagVon type: GormEncryptedStringType, sqlType: 'TEXT'
     }
 
     DateiAnhang addImage(Map map) {

@@ -6,8 +6,13 @@ import static org.springframework.http.HttpStatus.*
 class DateiAnhangController {
 
     DateiAnhangService daService
+    ImageService imageService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+
+    def render(Long id){
+        render imageService.getBytes(daService.get(id).name)
+    }
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)

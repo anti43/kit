@@ -34,4 +34,11 @@ class ImageService implements GrailsConfigurationAware  {
         log.warn("Created $dest")
         return [file: new File(folder, filename), name: cmd.featuredImageFile.originalFilename]
     }
+
+    byte[] getBytes(String filename){
+        def folderPath = "${cdnFolder}/images/" as String
+        def folder = new File(folderPath)
+        def dest = new File(folder, filename)
+        return dest.bytes
+    }
 }

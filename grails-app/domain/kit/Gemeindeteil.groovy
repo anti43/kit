@@ -2,15 +2,11 @@ package kit
 
 import com.bloomhealthco.jasypt.GormEncryptedStringType
 
-class VorgangsKategorie {
+class Gemeindeteil {
     String name
 
     static constraints = {
     }
-
     static mapping = {
-    }
-    String toString(){
-        name
     }
 }

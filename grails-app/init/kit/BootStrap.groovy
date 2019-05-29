@@ -44,6 +44,12 @@ class BootStrap {
 
                 a.createBenutzer("$it", 'RandomPassowrd1')
             }
+
+            ["Alle", "Perl", "Besch", "Nennig"].each{
+                Gemeindeteil g = new Gemeindeteil()
+                g.name = it
+                g.save(flush: true, failOnError: true)
+            }
         }
 
         if (VorgangsKategorie.count == 0) {
