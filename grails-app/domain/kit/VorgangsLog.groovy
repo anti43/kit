@@ -8,16 +8,18 @@ class VorgangsLog {
     Vorgang vorgang
     String text
     String benutzer
+    String komplett
 
     static constraints = {
     }
 
     static mapping = {
+        komplett type: GormEncryptedStringType, sqlType: 'TEXT'
         text type: GormEncryptedStringType, sqlType: 'TEXT'
         benutzer type: GormEncryptedStringType
     }
 
     String toString(){
-        benutzer + ": " + text
+        dateCreated.format("dd.MM.yyyy") + " (" + benutzer + ") " + text
     }
 }

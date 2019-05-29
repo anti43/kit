@@ -40,12 +40,15 @@ class VorgangController {
 
     def comment(){
         String text = params.text
-        String name = params.name?:springSecurityService.currentUser.username
-        VorgangsKommentar k= new VorgangsKommentar()
-        k.benutzer = name
-        k.text = text
-        k.vorgang = Vorgang.get(params.id)
-        k.save(flush: true, failOnError: true)
+        if(text?.trim()){
+            String name = params.name?:springSecurityService.currentUser.username
+            VorgangsKommentar k= new VorgangsKommentar()
+            k.benutzer = name
+            k.text = text
+            k.vorgang = Vorgang.get(params.id)
+            k.save(flush: true, failOnError: true)
+            flash.message="Vielen Dank, ihr Kommentar wird in Kürze moderiert werden."
+        }
         redirect action: 'show', id: params.id
     }
 
@@ -67,6 +70,7 @@ class VorgangController {
             VorgangsLog vl = new VorgangsLog()
             vl.vorgang = vorgang
             vl.text = t
+            vl.komplett = t
             vl.benutzer = benutzer as String
             vl.save(flush: true, failOnError: true)
         } catch (ValidationException e) {
@@ -97,10 +101,11 @@ class VorgangController {
             def x = vorgang.getChanges()
             def benutzer = SecurityContextHolder.getContext().getAuthentication()?.name
             if (x) {
-                String t = "bearbeitet:\n${x}"
+                String t = "bearbeitet: ${vorgang.dirtyPropertyNames}"
                 VorgangsLog vl = new VorgangsLog()
                 vl.vorgang = vorgang
                 vl.text = t
+                vl.komplett = x
                 vl.benutzer = benutzer as String
                 vl.save(flush: true, failOnError: true)
             }

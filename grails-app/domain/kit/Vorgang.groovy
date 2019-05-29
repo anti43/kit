@@ -80,7 +80,7 @@ class Vorgang {
     String getChanges() {
         String t = ""
         this.dirtyPropertyNames.each {
-            t = t + "$it: ${getPersistentValue(it as String)} -> ${this[(it as String)]}"
+            t = t + "<li><b>$it</b> <br>alt:${getPersistentValue(it as String)}<br>neu: ${this[(it as String)]}</li>"
         }
         return t
     }

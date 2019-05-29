@@ -44,6 +44,7 @@
                     </a>
                 </li>
                 <li class="nav-item"> <a href="/vorgang/create" class="nav-link">Neuen Vorgang anlegen</a></li>
+                <li class="nav-item"> <a href="/vorgangsKommentar/index" class="nav-link">Moderation</a></li>
                 <li class="nav-item"> <g:link controller="logout" class="nav-link">Logout</g:link></li>
 
             </ul>

@@ -1,0 +1,4 @@
+2019-05-29 22:24:54 jdbc[12]: exception
+org.h2.jdbc.JdbcSQLDataException: Wert zu gross / lang für Feld """KOMPLETT"" VARCHAR(255) NOT NULL": "STRINGDECODE('<li><b>bemerkungen</b> <br>alt:null<br>neu: <p>bla fasel</p></li><li><b>antragEntschiedenAm</b> <br>alt:null<br>ne... (431)"
+Value too long for column """KOMPLETT"" VARCHAR(255) NOT NULL": "STRINGDECODE('<li><b>bemerkungen</b> <br>alt:null<br>neu: <p>bla fasel</p></li><li><b>antragEntschiedenAm</b> <br>alt:null<br>ne... (431)"; SQL statement:
+insert into vorgangs_log (id, version, date_created, vorgang_id, benutzer, komplett, text) values (null, ?, ?, ?, ?, ?, ?) [22001-199]

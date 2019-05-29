@@ -21,3 +21,12 @@ body {
 footer {
     flex-shrink: 0;
 }
+.scaffold-show {
+    width: 75%;
+}
+.scaffold-edit {
+    width: 75%;
+}
+.scaffold-list {
+    width: 100%;
+}

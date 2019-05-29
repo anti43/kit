@@ -11,11 +11,20 @@ class VorgangsKommentarController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
+        params.sort= params.sort?:'veroeffentlicht'
+        params.order =  params.order?:"asc"
         respond vorgangsKommentarService.list(params), model:[vorgangsKommentarCount: vorgangsKommentarService.count()]
     }
 
     def show(Long id) {
         respond vorgangsKommentarService.get(id)
+    }
+
+    def publish(Long id){
+        def  p = vorgangsKommentarService.get(id)
+        p.veroeffentlicht = true
+        vorgangsKommentarService.save(p)
+        redirect controller: 'vorgang', action: 'show', id: p.vorgang.id
     }
 
     def create() {

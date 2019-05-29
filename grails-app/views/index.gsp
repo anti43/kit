@@ -7,7 +7,7 @@
 
 <body>
 <g:set var="springSecurityService" bean="springSecurityService"/>
-<g:set var="items" value="${kit.Vorgang.findAllByOeffentlich(true, [max: 10]).sort {it.lastUpdated.time}.reverse()}"/>
+<g:set var="vorgangList" value="${kit.Vorgang.findAllByOeffentlich(true, [max: 10]).sort {it.lastUpdated.time}.reverse()}"/>
 <!-- Post Content Column -->
 <div class="col-lg-8">
     <h1 class="mt-4">KIT - Kommunale Intelligenz und Transparenz</h1>
@@ -19,24 +19,26 @@
     <hr>
 
     <!-- Date/Time -->
-    <p>Zuletzt aktualisiert: ${(items?.find()?.lastUpdated?:new Date()).format('dd.MM.yyyy')}</p>
+    <p>Zuletzt aktualisiert: ${(vorgangList?.find()?.lastUpdated?:new Date()).format('dd.MM.yyyy')}</p>
 
     <hr>
-    <p>Letzte Vorgänge:</p>
+    <p>Letzte Vorgänge: (<a href="/vorgang/index">Alle anzeigen</a> )</p>
 
     <table>
         <thead>
         <th>Id</th>
         <th>Aktualisiert am</th>
         <th>Bezeichnung</th>
+        <th>Status</th>
         </thead>
         <tbody>
-        <g:each in="${items}">
-        <tr>
-            <td><a href="/vorgang/show/${it.id}">${it.id}</a></td>
-            <td>${it.lastUpdated.format('dd.MM.yyyy')}</td>
-            <td>${it.bezeichnung}</td>
-        </tr>
+        <g:each in="${vorgangList}">
+            <tr>
+                <td><a href="/vorgang/show/${it.id}">${it.id}</a></td>
+                <td>${it.lastUpdated.format('dd.MM.yyyy')}</td>
+                <td>${it.bezeichnung}</td>
+                <td>${it.status}</td>
+            </tr>
         </g:each>
         </tbody>
     </table>
