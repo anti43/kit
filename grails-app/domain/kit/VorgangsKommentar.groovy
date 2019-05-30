@@ -10,6 +10,7 @@ class VorgangsKommentar {
     String text
     boolean veroeffentlicht = false
 
+    static hasMany = [vorgaenge:Vorgang]
     static constraints = {
         text widget: 'textarea', nullable: false
     }

@@ -39,14 +39,25 @@
                 <a href="#">${vorgang.vorschlagVon}</a>
             </p>
         </g:if>
+        <g:if test="${vorgang.antragEingereichtAm}">
+            <div class="alert alert-success">
+                <h2>Antrag im zuständigen Gremium eingreicht</h2>
+                <blockquote class="blockquote">
+                    <p class="mb-0">
+                        am&nbsp;${vorgang.antragEingereichtAm.format('dd.MM.yyyy')}
+                    </p>
+                </blockquote>
+            </div>
+        </g:if>
 
         <g:if test="${vorgang.antragEntschiedenAm}">
-            <div class="alert alert-info">
+            <div class="alert alert-danger">
          <h2>Entscheidung bereits getroffen</h2>
          <blockquote class="blockquote">
              <p class="mb-0">
                     am&nbsp;${vorgang.antragEntschiedenAm.format('dd.MM.yyyy')}
                 </p>
+             <p>  <p>Ergebnis: <b>${vorgang.status}</b></p></p>
             </blockquote>
             </div>
         </g:if>
@@ -149,9 +160,27 @@
                     <div class="col-lg-10">
                         <ul class="list-unstyled mb-0">
 
-                            <g:each in="${kit.VorgangsKategorie.all}">
+                            <g:each in="${vorgang.kategorien}">
                                 <li>
                                     <a href="/vorgangsKategorie/vorgaenge/${it.name}">${it.name}</a>
+                                </li>
+                            </g:each>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card my-4">
+            <h5 class="card-header">Betroffene Ortschaften</h5>
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-10">
+                        <ul class="list-unstyled mb-0">
+
+                            <g:each in="${vorgang.ortschaften}">
+                                <li>
+                                    <a href="/gemeindeteil/vorgaenge/${it.name}">${it.name}</a>
                                 </li>
                             </g:each>
                         </ul>

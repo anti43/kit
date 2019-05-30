@@ -29,7 +29,22 @@
             <g:form resource="${this.vorgang}" method="PUT">
                 <g:hiddenField name="version" value="${this.vorgang?.version}" />
                 <fieldset class="form">
-                    <f:all bean="vorgang"/>
+                    <f:all bean="vorgang" except="bilder,ortschaften,kategorien"/>
+
+                    <div class="fieldcontain">
+                        <label for="ortschaften">Ortschaften</label><select name="ortschaften" id="ortschaften" multiple="">
+                        <g:each in="${kit.Gemeindeteil.all.sort{it.name}}">
+                            <option <%vorgang.ortschaften.contains(it)?out<<'selected':''%> value="${it.id}">${it.name}</option>
+                        </g:each>
+                    </select>
+                    </div>
+                    <div class="fieldcontain">
+                        <label for="kategorien">Kategorien</label><select name="kategorien" id="kategorien" multiple="">
+                        <g:each in="${kit.VorgangsKategorie.all.sort{it.name}}">
+                            <option <%vorgang.kategorien.contains(it)?out<<'selected':''%> value="${it.id}">${it.name}</option>
+                        </g:each>
+                    </select>
+                    </div>
                 </fieldset>
                 <fieldset class="buttons">
                     <input class="save" type="submit" value="${message(code: 'default.button.update.label', default: 'Update')}" />

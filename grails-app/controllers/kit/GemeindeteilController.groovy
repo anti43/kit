@@ -9,6 +9,17 @@ class GemeindeteilController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
+
+    def vorgaenge(String id){
+        flash.message = "Alle Vorgänge for Ortschaft $id"
+        render view: '/vorgang/index', model: [vorgangList: Vorgang.createCriteria().list {
+            ortschaften {
+                'in'('name', [id])
+            }
+        }]
+    }
+
+
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         respond gemeindeteilService.list(params), model:[gemeindeteilCount: gemeindeteilService.count()]

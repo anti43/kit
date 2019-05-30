@@ -45,7 +45,21 @@ class BootStrap {
                 a.createBenutzer("$it", 'RandomPassowrd1')
             }
 
-            ["Alle", "Perl", "Besch", "Nennig"].each{
+            ["Gemeinde",
+             "Besch" ,
+             "Borg",
+             "Büschdorf",
+             "Eft-Hellendorf",
+             "Keßlingen",
+             "Münzingen",
+             "Nennig",
+             "Oberleuken",
+             "Oberperl",
+             "Perl",
+             "Sehndorf",
+             "Sinz",
+             "Tettingen-Butzdorf",
+             "Wochern"].each{
                 Gemeindeteil g = new Gemeindeteil()
                 g.name = it
                 g.save(flush: true, failOnError: true)

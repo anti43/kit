@@ -25,6 +25,7 @@
                 <th>Aktualisiert am</th>
                 <th>Bezeichnung</th>
                 <th>Status</th>
+                <th>Öffentlich</th>
                 </thead>
                 <tbody>
                 <g:each in="${vorgangList}">
@@ -33,6 +34,7 @@
                         <td>${it.lastUpdated.format('dd.MM.yyyy')}</td>
                         <td>${it.bezeichnung}</td>
                         <td>${it.status}</td>
+                        <td>${it.oeffentlich}</td>
                     </tr>
                 </g:each>
                 </tbody>

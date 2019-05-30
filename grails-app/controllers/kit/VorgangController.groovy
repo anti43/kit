@@ -64,7 +64,16 @@ class VorgangController {
 
         try {
             vorgang.mandant = vorgang.getCurrentMandant()
+            params.getList('kategorien').each{
+                vorgang.kategorien<<(VorgangsKategorie.get(it))
+            }
+            params.getList('ortschaften').each{
+                vorgang.addToOrtschaften(Gemeindeteil.get(it))
+            }
+
             vorgangService.save(vorgang)
+
+
             def benutzer = SecurityContextHolder.getContext().getAuthentication()?.name
             String t = "erstellt"
             VorgangsLog vl = new VorgangsLog()
@@ -92,6 +101,7 @@ class VorgangController {
     }
 
     def update(Vorgang vorgang) {
+        log.info params as String
         if (vorgang == null) {
             notFound()
             return
@@ -108,6 +118,12 @@ class VorgangController {
                 vl.komplett = x
                 vl.benutzer = benutzer as String
                 vl.save(flush: true, failOnError: true)
+            }
+            params.getList('kategorien').each{
+                vorgang.kategorien<<(VorgangsKategorie.get(it))
+            }
+            params.getList('ortschaften').each{
+                vorgang.addToOrtschaften(Gemeindeteil.get(it))
             }
             vorgangService.save(vorgang)
         } catch (ValidationException e) {

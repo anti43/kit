@@ -10,8 +10,15 @@ class VorgangsKategorieController {
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def vorgaenge(String id){
-        respond Vorgang.findAllByVorgangsKategorie(VorgangsKategorie.findByName(id))
+
+        flash.message = "Alle Vorgänge for Kategorie $id"
+        render view: '/vorgang/index', model: [vorgangList: Vorgang.createCriteria().list {
+            kategorien {
+                'in'('name', [id])
+            }
+        }]
     }
+
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)

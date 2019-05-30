@@ -85,13 +85,31 @@
         </div>
     </div>
 
+    <div class="card my-4">
+        <h5 class="card-header">Ortschaften</h5>
+
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-10">
+                    <ul class="list-unstyled mb-0">
+
+                        <g:each in="${kit.Gemeindeteil.all}">
+                            <li>
+                                <a href="/gemeindeteil/vorgaenge/${it.name}">${it.name}</a>
+                            </li>
+                        </g:each>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Side Widget -->
     <div class="card my-4">
         <h5 class="card-header">Informationen</h5>
 
         <div class="card-body">
-            You can put anything you want inside of these side widgets. They are easy to use, and feature the new Bootstrap 4 card containers!
-        </div>
+         </div>
     </div>
 
 </div>

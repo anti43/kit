@@ -30,3 +30,7 @@ footer {
 .scaffold-list {
     width: 100%;
 }
+
+.navbar-brand {
+    background-color: white;
+}

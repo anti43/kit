@@ -27,7 +27,21 @@
             </g:hasErrors>
             <g:form resource="${this.vorgang}" method="POST">
                 <fieldset class="form">
-                    <f:all bean="vorgang"/>
+                    <f:all bean="vorgang" except="bilder,ortschaften,kategorien"/>
+                    <div class="fieldcontain">
+                        <label for="ortschaften">Ortschaften</label><select name="ortschaften" id="ortschaften" multiple="">
+                        <g:each in="${kit.Gemeindeteil.all.sort{it.name}}">
+                            <option value="${it.id}">${it.name}</option>
+                        </g:each>
+                    </select>
+                    </div>
+                    <div class="fieldcontain">
+                        <label for="kategorien">Kategorien</label><select name="kategorien" id="kategorien" multiple="">
+                        <g:each in="${kit.VorgangsKategorie.all.sort{it.name}}">
+                            <option value="${it.id}">${it.name}</option>
+                        </g:each>
+                    </select>
+                    </div>
                 </fieldset>
                 <fieldset class="buttons">
                     <g:submitButton name="create" class="save" value="${message(code: 'default.button.create.label', default: 'Create')}" />

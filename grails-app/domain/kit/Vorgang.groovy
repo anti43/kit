@@ -14,7 +14,7 @@ class Vorgang {
     Boolean initiatorVerstecken = false
     Mandant mandant
 
-    String status
+    String status = "Neu"
 
 
     Date antragEingereichtAm
@@ -42,7 +42,7 @@ class Vorgang {
         antragEingereichtAm nullable: true
         antragEntschiedenAm nullable: true
 
-        status inList: ["Eingegangen", "Abgelehnt", "Angenommen", "Zuständigkeit unklar"]
+        status inList: ["Neu", "Wird diskutiert", "Abgelehnt", "Angenommen", "Zuständigkeit unklar"]
 
         begründung widget: 'textarea', nullable: true
 
