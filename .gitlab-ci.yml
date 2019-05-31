@@ -1,0 +1,16 @@
+image: java:8-jdk
+
+
+
+assemble:
+  tags:
+    - java
+  stage: deploy
+  only:
+    - /^release-.*$/
+  script:
+    - ./gradlew assemble
+  artifacts:
+    expire_in: 12 years
+    paths:
+    - build/libs/*.war
