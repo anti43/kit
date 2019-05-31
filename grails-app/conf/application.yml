@@ -94,6 +94,7 @@ endpoints:
 
 ---
 hibernate:
+    dialect: org.hibernate.dialect.PostgreSQLDialect
     cache:
         queries: false
         use_second_level_cache: false
@@ -101,16 +102,15 @@ hibernate:
 dataSource:
     pooled: true
     jmxExport: true
-    dialect: org.hibernate.dialect.PostgresDialect
     driverClassName: org.postgresql.Driver
-    username: '${JDBC_USER}'
-    password: '${JDBC_PASSWORD}'
+    username: ${JDBC_USER}
+    password: ${JDBC_PASSWORD}
 
 environments:
     development:
         dataSource:
             dbCreate: update
-            url: jdbc:postgresql://'${JDBC_URL}'
+            url: jdbc:postgresql://${JDBC_URL}:5432/kit
     test:
         dataSource:
             dbCreate: update
@@ -118,7 +118,7 @@ environments:
     production:
         dataSource:
             dbCreate: update
-            url: jdbc:h2:./kitdb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
+            url: jdbc:postgresql://${JDBC_URL}:5432/kit
             properties:
                 jmxEnabled: true
                 initialSize: 5
