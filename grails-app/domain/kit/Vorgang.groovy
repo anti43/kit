@@ -1,6 +1,6 @@
 package kit
 
-import com.bloomhealthco.jasypt.GormEncryptedStringType
+
 import org.springframework.security.core.context.SecurityContextHolder
 
 class Vorgang {
@@ -9,10 +9,10 @@ class Vorgang {
     Date lastUpdated
 
     String bezeichnung
-    String beschreibung, bemerkungen, begründung, vorschlagVon
+    String beschreibung, bemerkungen, begründung, vorschlagVon,vorschlagVonEmail
     Boolean oeffentlich = false
     Boolean initiatorVerstecken = false
-    Mandant mandant
+
 
     String status = "Neu"
 
@@ -27,15 +27,13 @@ class Vorgang {
     def beforeUpdate() {
     }
 
-    Mandant getCurrentMandant() {
-        Benutzer.findByUsername(SecurityContextHolder.getContext().getAuthentication()?.name)?.mandant
-    }
 
     static constraints = {
         bezeichnung()
         beschreibung widget: 'textarea', nullable: true
         bemerkungen widget: 'textarea', nullable: true
         vorschlagVon nullable: true
+        vorschlagVonEmail nullable: true
         oeffentlich()
         initiatorVerstecken()
 
@@ -46,18 +44,16 @@ class Vorgang {
 
         begründung widget: 'textarea', nullable: true
 
-
-        mandant display: false
         bilder()
 
     }
 
     static mapping = {
-        bezeichnung type: GormEncryptedStringType, sqlType: 'TEXT'
-        beschreibung type: GormEncryptedStringType, sqlType: 'TEXT'
-        bemerkungen type: GormEncryptedStringType, sqlType: 'TEXT'
-        begründung type: GormEncryptedStringType, sqlType: 'TEXT'
-        vorschlagVon type: GormEncryptedStringType, sqlType: 'TEXT'
+        bezeichnung  sqlType: 'TEXT'
+        beschreibung  sqlType: 'TEXT'
+        bemerkungen  sqlType: 'TEXT'
+        begründung  sqlType: 'TEXT'
+        vorschlagVon  sqlType: 'TEXT'
     }
 
     DateiAnhang addImage(Map map) {
@@ -66,7 +62,7 @@ class Vorgang {
         b.name = map.name
         b.vorgang = this
         b.groesse = map.file.length()
-        b.mandant = mandant
+
         b.save(flush: true, failOnError: true)
         addToBilder(b)
         save(flush: true)

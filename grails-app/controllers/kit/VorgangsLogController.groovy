@@ -1,6 +1,8 @@
 package kit
 
 import grails.validation.ValidationException
+import org.springframework.security.core.context.SecurityContextHolder
+
 import static org.springframework.http.HttpStatus.*
 
 class VorgangsLogController {
@@ -8,11 +10,6 @@ class VorgangsLogController {
     VorgangsLogService vorgangsLogService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
-
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond vorgangsLogService.list(params), model:[vorgangsLogCount: vorgangsLogService.count()]
-    }
 
     def show(Long id) {
         respond vorgangsLogService.get(id)

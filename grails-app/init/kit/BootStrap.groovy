@@ -13,15 +13,10 @@ class BootStrap {
             r.save(flush: true)
         }
 
-        if(!Benutzer.findByUsername('admin')){
-            Mandant a = new Mandant()
-            a.displayName = "Administrativer Benutzer"
-            a.save(flush: true, failOnError: true)
-
+        if(!Benutzer.findByUsername('Grüne OV Perl')){
             Benutzer b = new Benutzer()
-            b.username = 'admin'
-            b.password = 'RandomHorse5'
-            b.mandant = a
+            b.username = 'Grüne OV Perl'
+            b.password = 'greenhouseeffect'
             b.save(flush: true, failOnError: true)
 
             BenutzerRolle bn = new BenutzerRolle()
@@ -35,17 +30,9 @@ class BootStrap {
             bn2.save(flush: true, failOnError: true)
         }
 
-        if(Mandant.count==1){
-            ["Grüne OV Perl", "Ortsrat Besch"].each{
-                Mandant a = new Mandant()
-                a.displayName = "$it"
-                a.logo = "https://upload.wikimedia.org/wikipedia/commons/5/51/B%C3%BCndnis_90_-_Die_Gr%C3%BCnen_Logo_%28transparent%29.svg"//"""https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Wappen_Besch.svg/1280px-Wappen_Besch.svg.png"
-                a.save(flush: true, failOnError: true)
-
-                a.createBenutzer("$it", 'RandomPassowrd1')
-            }
-
-            ["Gemeinde",
+        if(Gemeindeteil.count==0){
+            ["Alle",
+             "Gemeinde",
              "Besch" ,
              "Borg",
              "Büschdorf",
@@ -74,6 +61,32 @@ class BootStrap {
                     a.save(flush: true, failOnError: true)
                 }
             }
+        }
+
+        if(Faq.count == 0){
+            Faq f = new Faq()
+            f.frage="Was ist das hier?"
+            f.antwort="Das Bürgerinformationsportal der Fraktion der Grünen im Gemeinderat Perl/OV Grüne Perl"
+            f.save(flush: true, failOnError: true)
+
+            Faq f2 = new Faq()
+            f2.frage="Was passiert mit meinem Anliegen?"
+            f2.antwort="Wir prüfen jedes Anliegen sehr gewissenhaft und entscheiden dann, " +
+                    "ob wir als Fraktion im Gemeindderat einen entsprechenden Antrag stellen/tätig werden. " +
+                    "Wir behalten uns vor, den Antrag umzuformulieren."
+            f2.save(flush: true, failOnError: true)
+
+            Faq f3 = new Faq()
+            f3.frage="Werde ich benachrichtigt bei Änderungen/Rückfragen oder falls mein Antrag entschieden wurde?"
+            f3.antwort="Ja, falls sie uns ihre Email-Adresse hinterlassen werden wir sie nach Möglichkeit kontaktieren."
+            f3.save(flush: true, failOnError: true)
+        }
+
+        if(Impressum.count==0){
+            Impressum i = new Impressum()
+            i.bezeichnung = "Inhaltlich Verantwortlicher"
+            i.text = "Bündnis90/Die Grünen OV Perl, vertreten durch Andreas Weber"
+            i.save(flush: true, failOnError: true)
         }
     }
     def destroy = {

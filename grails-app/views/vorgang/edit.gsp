@@ -50,28 +50,7 @@
                     <input class="save" type="submit" value="${message(code: 'default.button.update.label', default: 'Update')}" />
                 </fieldset>
             </g:form>
-            <input id="fileupload" type="file" name="featuredImageFile" data-url="/vorgang/uploadImage/${this.vorgang.id}">
-            <script>
-                var y = $('a[href="/dateiAnhang/create?vorgang.id=${vorgang.id}"]');
-                var x = $('#fileupload');
 
-                y.detach();
-
-                x.fileupload({
-                    dataType: 'json',
-                    add: function (e, data) {
-                        data.context = $('<img/>').prop('href', "assets/loading.gif").appendTo($('div.nav'));
-                        data.submit();
-                    },
-                    done: function (e, data) {
-                        console.log('ok');
-                        window.location = window.location;
-                    },
-                    error: function (e, data) {
-                        console.log('error');
-                        window.location = window.location;
-                    }
-                });</script>
         </div>
     </body>
 </html>

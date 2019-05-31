@@ -35,10 +35,8 @@ class ImageService implements GrailsConfigurationAware  {
         return [file: new File(folder, filename), name: cmd.featuredImageFile.originalFilename]
     }
 
-    byte[] getBytes(String filename){
-        def folderPath = "${cdnFolder}/images/" as String
-        def folder = new File(folderPath)
-        def dest = new File(folder, filename)
+    byte[] getBytes(String filenpath){
+        def dest = new File(filenpath)
         return dest.bytes
     }
 }

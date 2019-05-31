@@ -2,32 +2,32 @@
 <html>
     <head>
         <meta name="layout" content="main" />
-        <g:set var="entityName" value="${message(code: 'mandant.label', default: 'Mandant')}" />
+        <g:set var="entityName" value="${message(code: 'impressum.label', default: 'Impressum')}" />
         <title><g:message code="default.create.label" args="[entityName]" /></title>
     </head>
     <body>
-        <a href="#create-mandant" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
+        <a href="#create-impressum" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
         <div class="nav" role="navigation">
             <ul>
-                <li><a class="home" href="${createLink(uri: '/')}">Startseite</a></li>
+                <li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
                 <li><g:link class="list" action="index"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
             </ul>
         </div>
-        <div id="create-mandant" class="content scaffold-create" role="main">
+        <div id="create-impressum" class="content scaffold-create" role="main">
             <h1><g:message code="default.create.label" args="[entityName]" /></h1>
             <g:if test="${flash.message}">
             <div class="message" role="status">${flash.message}</div>
             </g:if>
-            <g:hasErrors bean="${this.mandant}">
+            <g:hasErrors bean="${this.impressum}">
             <ul class="errors" role="alert">
-                <g:eachError bean="${this.mandant}" var="error">
+                <g:eachError bean="${this.impressum}" var="error">
                 <li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message error="${error}"/></li>
                 </g:eachError>
             </ul>
             </g:hasErrors>
-            <g:form resource="${this.mandant}" method="POST">
+            <g:form resource="${this.impressum}" method="POST">
                 <fieldset class="form">
-                    <f:all bean="mandant"/>
+                    <f:all bean="impressum"/>
                 </fieldset>
                 <fieldset class="buttons">
                     <g:submitButton name="create" class="save" value="${message(code: 'default.button.create.label', default: 'Create')}" />

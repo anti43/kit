@@ -21,6 +21,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.7.4/plugins/imagetools/plugin.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.7.4/plugins/paste/plugin.min.js"></script>
 
+    <asset:javascript src="application.js"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.7.4/skins/lightgray/skin.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.7.4/skins/lightgray/skin.mobile.min.css" />
 
@@ -31,7 +32,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-info fixed-top">
     <div class="container">
         <a class="navbar-brand" href="/">
-            <img height="50px" src="${springSecurityService.currentUser?.mandant?.logo}">
+            <img height="50px" src="${System.getProperty('LOGO', '')}">
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -39,14 +40,24 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="/">KIT (${springSecurityService.currentUser?.username})
+                    <a class="nav-link" href="/">KIT (${System.getProperty('MANDANT', 'Grüne OV Perl')})
                         <!--span class="sr-only">(current)</span-->
                     </a>
                 </li>
+<g:if test="${springSecurityService.currentUser instanceof kit.Benutzer}">
                 <li class="nav-item"> <a href="/vorgang/create" class="nav-link">Neuen Vorgang anlegen</a></li>
-                <li class="nav-item"> <a href="/vorgangsKommentar/index" class="nav-link">Moderation</a></li>
-                <li class="nav-item"> <g:link controller="logout" class="nav-link">Logout</g:link></li>
+             <li class="nav-item"> <a href="/vorgangsKommentar/index" class="nav-link">Moderation</a></li>
+</g:if>
 
+                <li class="nav-item"> <g:link controller="faq" class="nav-link">FAQ</g:link></li>
+                <li class="nav-item"> <g:link controller="impressum" class="nav-link">Impressum</g:link></li>
+
+                <g:if test="${springSecurityService.currentUser instanceof kit.Benutzer}">
+                    <li class="nav-item"> <g:link controller="logoff" class="nav-link">Logout</g:link></li>
+                </g:if>
+                <g:else>
+                   <li class="nav-item"> <g:link controller="login" class="nav-link">Login</g:link></li>
+                </g:else>
             </ul>
         </div>
     </div>

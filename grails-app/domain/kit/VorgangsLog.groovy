@@ -1,6 +1,6 @@
 package kit
 
-import com.bloomhealthco.jasypt.GormEncryptedStringType
+
 
 class VorgangsLog {
     Date dateCreated
@@ -14,9 +14,8 @@ class VorgangsLog {
     }
 
     static mapping = {
-        komplett type: GormEncryptedStringType, sqlType: 'TEXT'
-        text type: GormEncryptedStringType, sqlType: 'TEXT'
-        benutzer type: GormEncryptedStringType
+        komplett  sqlType: 'TEXT'
+        text  sqlType: 'TEXT'
     }
 
     String toString(){

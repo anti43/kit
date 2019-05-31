@@ -1,32 +1,52 @@
 package kit
 
+import grails.gorm.transactions.Transactional
+import grails.plugin.springsecurity.annotation.Secured
 import grails.validation.ValidationException
+import org.springframework.security.core.context.SecurityContextHolder
+
 import static org.springframework.http.HttpStatus.*
 
 class DateiAnhangController {
 
-    DateiAnhangService daService
+    DateiAnhangService dateiAnhangService
     ImageService imageService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
+
+    @Transactional
+    def remove(Long id){
+        def d = DateiAnhang.get(id)
+        def vid = d.vorgang
+        vid.removeFromBilder(d)
+        vid.save()
+        d.delete()
+        redirect controller: 'vorgang', action: 'show', id: vid.id
+    }
+
+
+
+    @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
     def render(Long id){
-        render imageService.getBytes(daService.get(id).name)
+        def d = DateiAnhang.get(id)
+        render file: imageService.getBytes(d.pfad), fileName: d.name
     }
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond daService.list(params), model:[bildCount: daService.count()]
+        respond dateiAnhangService.list(params), model:[bildCount: dateiAnhangService.count()]
     }
 
     def show(Long id) {
-        respond daService.get(id)
+        respond dateiAnhangService.get(id)
     }
 
     def create() {
         respond new DateiAnhang(params)
     }
 
+    @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
     def save(DateiAnhang bild) {
         if (bild == null) {
             notFound()
@@ -34,8 +54,7 @@ class DateiAnhangController {
         }
 
         try {
-            bild.mandant = bild.getCurrentMandant()
-            daService.save(bild)
+            dateiAnhangService.save(bild)
             bild.vorgang.addToBilder(bild)
             bild.vorgang.save()
         } catch (ValidationException e) {
@@ -53,7 +72,7 @@ class DateiAnhangController {
     }
 
     def edit(Long id) {
-        respond daService.get(id)
+        respond dateiAnhangService.get(id)
     }
 
     def update(DateiAnhang bild) {
@@ -63,7 +82,7 @@ class DateiAnhangController {
         }
 
         try {
-            daService.save(bild)
+            dateiAnhangService.save(bild)
         } catch (ValidationException e) {
             respond bild.errors, view:'edit'
             return
@@ -84,7 +103,7 @@ class DateiAnhangController {
             return
         }
 
-        daService.delete(id)
+        dateiAnhangService.delete(id)
 
         request.withFormat {
             form multipartForm {

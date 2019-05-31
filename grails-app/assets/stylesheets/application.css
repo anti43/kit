@@ -22,9 +22,15 @@ footer {
     flex-shrink: 0;
 }
 .scaffold-show {
-    width: 75%;
+    width: 65%;
 }
 .scaffold-edit {
+    width: 75%;
+}
+.scaffold-create {
+    width: 100%;
+}
+.nav {
     width: 75%;
 }
 .scaffold-list {

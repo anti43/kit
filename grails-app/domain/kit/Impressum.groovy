@@ -1,21 +1,17 @@
 package kit
 
+class Impressum {
 
-
-class VorgangsKommentar {
-    Date dateCreated
-
-    String benutzer
-    Vorgang vorgang
+    String bezeichnung
     String text
-    boolean veroeffentlicht = false
 
-    static hasMany = [vorgaenge:Vorgang]
     static constraints = {
         text widget: 'textarea', nullable: false
+        bezeichnung widget: 'textarea', nullable: false
     }
 
     static mapping = {
         text  sqlType: 'TEXT'
+        bezeichnung  sqlType: 'TEXT'
     }
 }

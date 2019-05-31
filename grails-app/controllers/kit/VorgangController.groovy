@@ -3,6 +3,7 @@ package kit
 import com.sun.javafx.collections.MappingChange
 import grails.converters.JSON
 import grails.plugin.springsecurity.SpringSecurityService
+import grails.plugin.springsecurity.annotation.Secured
 import grails.validation.Validateable
 import grails.validation.ValidationException
 import org.springframework.security.core.context.SecurityContextHolder
@@ -18,6 +19,67 @@ class VorgangController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
+
+    @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
+    def neu() {
+        respond new Vorgang(params)
+    }
+
+
+    @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
+    def uebermitteln(Vorgang vorgang) {
+        if (vorgang == null) {
+            notFound()
+            return
+        }
+
+        vorgang.ortschaften = [] as Set
+        vorgang.kategorien = [] as Set
+        vorgang.oeffentlich = true
+
+        try {
+            VorgangsKategorie.all.each { VorgangsKategorie it ->
+                if (vorgang.bezeichnung?.toLowerCase()?.contains(it.name.toLowerCase()) ||
+                        vorgang.beschreibung?.toLowerCase()?.contains(it.name.toLowerCase())
+                ) {
+                    vorgang.kategorien << (it)
+                }
+            }
+            Gemeindeteil.all.each { Gemeindeteil it ->
+                if (vorgang.bezeichnung?.toLowerCase()?.contains(it.name.toLowerCase()) ||
+                        vorgang.beschreibung?.toLowerCase()?.contains(it.name.toLowerCase().split('-').find())
+                ) {
+                    vorgang.ortschaften << (it)
+                }
+            }
+
+            vorgangService.save(vorgang)
+
+
+            def benutzer = 'Anonym'
+            if (vorgang.vorschlagVon && !vorgang.initiatorVerstecken) {
+                benutzer = vorgang.vorschlagVon
+            }
+
+            String t = "erstellt"
+            VorgangsLog vl = new VorgangsLog()
+            vl.vorgang = vorgang
+            vl.text = t
+            vl.komplett = t
+            vl.benutzer = benutzer as String
+            vl.save(flush: true, failOnError: true)
+        } catch (ValidationException e) {
+            respond vorgang.errors, view: 'create'
+            return
+        }
+
+        flash.message = "Ihr Anliegen wurde übermittelt. Sie können nun noch Bilder hinzufügen (Schaltfläche 'Bild hochladen')."
+
+        redirect action: 'show', id: vorgang.id
+
+    }
+
+    @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
     def suche() {
         params.max = Math.min(params.max ?: 10, 100)
         String q = params.remove('q')
@@ -28,26 +90,49 @@ class VorgangController {
         respond z, model: [vorgangCount: z.size()]
     }
 
-    def index(Integer max) {
+    @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
+    def liste(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond vorgangService.list(params), model: [vorgangCount: vorgangService.count()]
+        respond Vorgang.findAllByOeffentlich(true, params), model: [vorgangCount: Vorgang.countByOeffentlich(true)]
     }
 
+
+    def index(Integer max) {
+        params.max = Math.min(max ?: 10, 100)
+        respond Vorgang.findAll(params), model: [vorgangCount: vorgangService.count()]
+    }
+
+    def publish(Long id){
+        def x = vorgangService.get(id)
+        x.oeffentlich = true
+        x.save(flush: true)
+        redirect action:'show', id:id
+    }
+
+    def unpublish(Long id){
+        def x = vorgangService.get(id)
+        x.oeffentlich = false
+        x.save(flush: true)
+        redirect action:'show', id:id
+    }
+
+    @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
     def show(Long id) {
-        def x =  vorgangService.get(id)
+        def x = vorgangService.get(id)
         respond x
     }
 
-    def comment(){
+    @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
+    def comment() {
         String text = params.text
-        if(text?.trim()){
-            String name = params.name?:springSecurityService.currentUser.username
-            VorgangsKommentar k= new VorgangsKommentar()
+        if (text?.trim()) {
+            String name = params.name ?: springSecurityService.currentUser.username
+            VorgangsKommentar k = new VorgangsKommentar()
             k.benutzer = name
             k.text = text
             k.vorgang = Vorgang.get(params.id)
             k.save(flush: true, failOnError: true)
-            flash.message="Vielen Dank, ihr Kommentar wird in Kürze moderiert werden."
+            flash.message = "Vielen Dank, ihr Kommentar wird in Kürze moderiert werden."
         }
         redirect action: 'show', id: params.id
     }
@@ -63,11 +148,10 @@ class VorgangController {
         }
 
         try {
-            vorgang.mandant = vorgang.getCurrentMandant()
-            params.getList('kategorien').each{
-                vorgang.kategorien<<(VorgangsKategorie.get(it))
+            params.getList('kategorien').each {
+                vorgang.kategorien << (VorgangsKategorie.get(it))
             }
-            params.getList('ortschaften').each{
+            params.getList('ortschaften').each {
                 vorgang.addToOrtschaften(Gemeindeteil.get(it))
             }
 
@@ -119,10 +203,10 @@ class VorgangController {
                 vl.benutzer = benutzer as String
                 vl.save(flush: true, failOnError: true)
             }
-            params.getList('kategorien').each{
-                vorgang.kategorien<<(VorgangsKategorie.get(it))
+            params.getList('kategorien').each {
+                vorgang.kategorien << (VorgangsKategorie.get(it))
             }
-            params.getList('ortschaften').each{
+            params.getList('ortschaften').each {
                 vorgang.addToOrtschaften(Gemeindeteil.get(it))
             }
             vorgangService.save(vorgang)
@@ -157,12 +241,13 @@ class VorgangController {
         }
     }
 
+    @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
     def uploadImage(FeaturedImageCommand cmd) {
 
         Vorgang vorgang = vorgangService.get(cmd.id)
 
         if (cmd.hasErrors()) {
-            flash.message = cmd.errors as String
+            flash.message = "Bitte eine gültige Datei auswählen (Bild oder PDF)"
             respond(cmd, model: [vorgang: vorgang], view: 'show')
             return
         }
@@ -175,7 +260,9 @@ class VorgangController {
 
         vorgang.addImage(file)
 
-        render(['file': file.name] as JSON)
+        flash.message = "Datei $file hinzugefügt!"
+
+        redirect action: 'show', id: vorgang.id
     }
 
     protected void notFound() {

@@ -1,22 +1,35 @@
 package kit
 
+import grails.plugin.springsecurity.SpringSecurityService
+import grails.plugin.springsecurity.annotation.Secured
 import grails.validation.ValidationException
+import org.springframework.security.core.context.SecurityContextHolder
+
 import static org.springframework.http.HttpStatus.*
 
 class GemeindeteilController {
 
     GemeindeteilService gemeindeteilService
+    SpringSecurityService springSecurityService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
 
+    @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
     def vorgaenge(String id){
+
+        if(id=='Alle'){
+            forward controller: 'vorgang', action: 'index'
+            return
+        }
+
         flash.message = "Alle Vorgänge for Ortschaft $id"
-        render view: '/vorgang/index', model: [vorgangList: Vorgang.createCriteria().list {
+        def gf = Vorgang.createCriteria().list {
             ortschaften {
                 'in'('name', [id])
             }
-        }]
+        }
+        render view: '/vorgang/index', model: [vorgangList: gf]
     }
 
 

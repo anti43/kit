@@ -14,7 +14,6 @@ class Benutzer implements Serializable {
     Date dateCreated
     Date lastUpdated
 
-    Mandant mandant
 
     String username
     String password
@@ -24,7 +23,7 @@ class Benutzer implements Serializable {
     boolean passwordExpired
 
     Set<Rolle> getAuthorities() {
-        ((BenutzerRolle.findAllByBenutzer(this) as List<BenutzerRolle>)*.rolle + [new Rolle(authority: mandant.authority)]) as Set<Rolle>
+        ((BenutzerRolle.findAllByBenutzer(this) as List<BenutzerRolle>)*.rolle ) as Set<Rolle>
     }
 
     static constraints = {

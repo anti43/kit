@@ -1,6 +1,9 @@
 package kit
 
+import grails.plugin.springsecurity.annotation.Secured
 import grails.validation.ValidationException
+import org.springframework.security.core.context.SecurityContextHolder
+
 import static org.springframework.http.HttpStatus.*
 
 class VorgangsKategorieController {
@@ -9,16 +12,23 @@ class VorgangsKategorieController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
+
+    @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
     def vorgaenge(String id){
+
+        if(id=='Alle'){
+            forward controller: 'vorgang', action: 'index'
+            return
+        }
 
         flash.message = "Alle Vorgänge for Kategorie $id"
         render view: '/vorgang/index', model: [vorgangList: Vorgang.createCriteria().list {
             kategorien {
+
                 'in'('name', [id])
             }
         }]
     }
-
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)

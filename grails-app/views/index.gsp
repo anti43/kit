@@ -7,14 +7,18 @@
 
 <body>
 <g:set var="springSecurityService" bean="springSecurityService"/>
-<g:set var="vorgangList" value="${kit.Vorgang.findAllByOeffentlich(true, [max: 10]).sort {it.lastUpdated.time}.reverse()}"/>
+<g:set var="vorgangList" value="${kit.Vorgang.findAllByOeffentlich( true, [max: 10]).sort {it.lastUpdated.time}.reverse()}"/>
 <!-- Post Content Column -->
 <div class="col-lg-8">
     <h1 class="mt-4">KIT - Kommunale Intelligenz und Transparenz</h1>
     <p class="lead">
         für
-        <a href="#">${springSecurityService.currentUser?.mandant?.displayName}</a>
+        <a href="#">${System.getProperty('MANDANT', 'Grüne OV Perl')}</a>
     </p>
+
+    <g:if test="${!(springSecurityService.currentUser instanceof kit.Benutzer)}">
+        <div class="btn btn-success"> <a style="color:white" href="/vorgang/neu" class="nav-link">Neues Anliegen übermitteln</a></div>
+    </g:if>
 
     <hr>
 
@@ -22,7 +26,7 @@
     <p>Zuletzt aktualisiert: ${(vorgangList?.find()?.lastUpdated?:new Date()).format('dd.MM.yyyy')}</p>
 
     <hr>
-    <p>Letzte Vorgänge: (<a href="/vorgang/index">Alle anzeigen</a> )</p>
+    <p>Letzte Vorgänge: (<a href="/vorgang/liste">Alle anzeigen</a> )</p>
 
     <table>
         <thead>
@@ -48,6 +52,17 @@
 <!-- Sidebar Widgets Column -->
 <div class="col-md-4">
 
+    <!-- Side Widget -->
+    <div class="card my-4">
+        <h5 class="card-header">Informationen</h5>
+
+        <div class="card-body">
+            Willkommen im Bürgerinformations-Portal!<br>
+            Sie haben Fragen? <a href="/faq">Hier</a> finden Sie einige Antworten.
+            Sie können sich auch gerne per Email an uns wenden.
+            Adresse: <a href="mailto:gruene@gemeinde-perl.de">gruene@gemeinde-perl.de</a>
+        </div>
+    </div>
     <!-- Search Widget -->
     <div class="card my-4">
         <h5 class="card-header">Suche</h5>
@@ -102,14 +117,6 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- Side Widget -->
-    <div class="card my-4">
-        <h5 class="card-header">Informationen</h5>
-
-        <div class="card-body">
-         </div>
     </div>
 
 </div>

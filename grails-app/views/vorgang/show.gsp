@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<g:set var="springSecurityService" bean="springSecurityService"/>
 <html>
     <head>
         <meta name="layout" content="main" />
@@ -10,36 +11,28 @@
         <div class="nav" role="navigation">
             <ul>
                 <li><a class="home" href="${createLink(uri: '/')}">Startseite</a></li>
+<g:if test="${springSecurityService.currentUser instanceof kit.Benutzer}">
                 <li><g:link class="list" action="index"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
                 <li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
+</g:if>
             </ul>
         </div>
-        <div id="show-vorgang" class="content scaffold-show" role="main">
-            <h1><g:message code="default.show.label" args="[entityName]" /></h1>
-            <g:if test="${flash.message}">
-            <div class="alert alert-warning" role="status">${flash.message}</div>
-            </g:if>
-            <g:form resource="${this.vorgang}" method="DELETE">
-                <fieldset class="buttons">
-                    <g:link class="edit" action="edit" resource="${this.vorgang}"><g:message code="default.button.edit.label" default="Edit" /></g:link>
-                </fieldset>
-            </g:form>
-        </div>
 
+    <g:if test="${flash.message}">
+        <div class="alert alert-warning col-lg-12" role="status">${flash.message}</div>
+    </g:if>
 
-
-    <g:set var="springSecurityService" bean="springSecurityService"/>
 
     <!-- Post Content Column -->
     <div class="col-lg-8">
         <h1 class="mt-4">${vorgang.bezeichnung}</h1>
-        <g:if test="${!vorgang.initiatorVerstecken}">
+        <g:if test="${(!vorgang.initiatorVerstecken) && vorgang.vorschlagVon}">
             <p class="lead">
                 von
                 <a href="#">${vorgang.vorschlagVon}</a>
             </p>
         </g:if>
-        <g:if test="${vorgang.antragEingereichtAm}">
+        <g:if test="${vorgang.antragEingereichtAm && !vorgang.antragEntschiedenAm}">
             <div class="alert alert-success">
                 <h2>Antrag im zuständigen Gremium eingreicht</h2>
                 <blockquote class="blockquote">
@@ -50,8 +43,16 @@
             </div>
         </g:if>
 
+
         <g:if test="${vorgang.antragEntschiedenAm}">
-            <div class="alert alert-danger">
+
+            <%
+                def cssclass = 'danger'
+                if(vorgang.status?.contains('Angenommen')){
+                    cssclass = 'success'
+                }
+            %>
+            <div class="alert alert-${cssclass}">
          <h2>Entscheidung bereits getroffen</h2>
          <blockquote class="blockquote">
              <p class="mb-0">
@@ -61,34 +62,39 @@
             </blockquote>
             </div>
         </g:if>
+<g:else>
+    <!-- Date/Time -->
+    <div class="alert alert-info">
+        <p>Erstellt: ${vorgang.dateCreated.format("dd.MM.yyyy")}</p>
+        <p>Zuletzt bearbeitet: ${vorgang.lastUpdated.format("dd.MM.yyyy")}</p>
+        <p>Aktueller Status: <b>${vorgang.status}</b></p>
+    </div>
 
-        <!-- Date/Time -->
-        <div class="alert alert-info">
-            <p>Erstellt: ${vorgang.dateCreated.format("dd.MM.yyyy")}</p>
-            <p>Zuletzt bearbeitet: ${vorgang.lastUpdated.format("dd.MM.yyyy")}</p>
-            <p>Aktueller Status: <b>${vorgang.status}</b></p>
-        </div>
 
+</g:else>
 
 
         <!-- Preview Image -->
         <% if(vorgang.bilder){%>
-        <img class="img-fluid rounded" src="/dateiAnhang/render/${vorgang.bilder.find().id}" alt="">
+        <img height="200px" class="img-fluid rounded" src="/dateiAnhang/render/${vorgang.bilder.sort{it.id}.find().id}" alt="">
         <hr>
         <%}%>
 
         <!-- Post Content -->
+        <% if(vorgang.beschreibung){%>
         <h2>Beschreibung</h2>
         ${vorgang.beschreibung.encodeAsRaw()}
 
+        <%}%>
 
+        <% if(vorgang.bemerkungen){%>
         <h2>Bemerkungen</h2>
         <blockquote class="blockquote">
             <p class="mb-0">
                 ${vorgang.bemerkungen.encodeAsRaw()}
             </p>
         </blockquote>
-
+        <%}%>
 
 
          <g:if test="${vorgang.begründung}">
@@ -114,7 +120,10 @@
                 </g:form>
             </div>
         </div>
-<h2>Kommentare:</h2><br>
+        <g:if test="${kit.VorgangsKommentar.countByVorgangAndVeroeffentlicht(vorgang, true)}">
+
+
+        <h2>Kommentare:</h2><br>
          <g:each in="${kit.VorgangsKommentar.findAllByVorgangAndVeroeffentlicht(vorgang, true)}">
              <!-- Single Comment -->
              <div class="media mb-4">
@@ -127,37 +136,66 @@
                           </div>
              </div>
         </g:each>
-
+        </g:if>
     </div>
+
 
     <!-- Sidebar Widgets Column -->
     <div class="col-md-4">
 
 
-        <!-- Search Widget -->
         <div class="card my-4">
-            <h5 class="card-header">Suche</h5>
+            <fieldset class="buttons">
+<g:if test="${springSecurityService.currentUser instanceof kit.Benutzer}">
+                <g:link class="edit" action="edit" resource="${this.vorgang}"><g:message code="default.button.edit.label" default="Edit" /></g:link>
+                <g:if test="${!vorgang.oeffentlich}">
+                    <g:link class="edit" action="publish" resource="${this.vorgang}">Veröffentlichen</g:link>
+                </g:if><g:else>
+                   <g:link class="edit" action="unpublish" resource="${this.vorgang}">Veröffentlichung aufheben</g:link>
+            </g:else>
+</g:if>
+                <g:uploadForm name="uploadFeaturedImage" action="uploadImage" class="form form-inline" style="width: 250px">
+                    <g:hiddenField name="id" value="${this.vorgang?.id}" />
+                    <g:hiddenField name="version" value="${this.vorgang?.version}" />
+                    <input type="file" name="featuredImageFile" id="featuredImageFile" onchange="$('#fileUpload').click()"/>
+                    <input id="fileUpload" class="save" type="submit" value="Bild hochladen" onmousedown="if(!$('#featuredImageFile').val())$('#featuredImageFile').click();"/>
+                </g:uploadForm>
+            </fieldset>
+        </div>
+
+        <!-- Categories Widget -->
+        <div class="card my-4">
+            <h5 class="card-header">Anhänge</h5>
 
             <div class="card-body">
-                <div class="input-group">
-                    <g:form controller="vorgang" action="suche">
-                        <input name="q" type="text" class="form-control" placeholder="Suche nach...">
-                        <span class="input-group-btn">
-                            <button class="btn btn-secondary" type="submit">Los!</button>
-                        </span>
-                    </g:form>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <ul class="list-unstyled mb-0">
 
+                            <g:each in="${vorgang.bilder.sort{it.id}}">
+                                <li>
+                                    <a href="/dateiAnhang/render/${it.id}"><img src="/dateiAnhang/render/${it.id}" width="150px">
+                                        ${it.name}
+                                    </a>
+                                <g:if test="${springSecurityService.currentUser instanceof kit.Benutzer}">
+                                    <br><a href="/dateiAnhang/remove/${it.id}">Bild entfernen
+                                    </a>
+                                </g:if>
+                                    <hr>
+                                </li>
+                            </g:each>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
-
         <!-- Categories Widget -->
         <div class="card my-4">
             <h5 class="card-header">Kategorien</h5>
 
             <div class="card-body">
                 <div class="row">
-                    <div class="col-lg-10">
+                    <div class="col-lg-12">
                         <ul class="list-unstyled mb-0">
 
                             <g:each in="${vorgang.kategorien}">
@@ -175,7 +213,7 @@
 
             <div class="card-body">
                 <div class="row">
-                    <div class="col-lg-10">
+                    <div class="col-lg-12">
                         <ul class="list-unstyled mb-0">
 
                             <g:each in="${vorgang.ortschaften}">
