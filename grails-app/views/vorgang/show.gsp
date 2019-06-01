@@ -114,6 +114,7 @@
                 <g:form action="comment" id="${vorgang.id}">
                     <div class="form-group">
                         Ihr Name (optional): <input name="name" type="text"/><br>
+                        Ich bin ein Mensch: <input type="checkbox" name="q"><br>
                         Kommentar: <textarea name="text" class="form-control nomce" rows="3"></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary">Absenden</button>

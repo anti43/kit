@@ -44,10 +44,11 @@ grails.mime.types = [
 
 grails {
    mail {
+     poolSize = 2
      host = "smtp.gmail.com"
      port = 465
-     username = System.getProperty('GMAIL_ACCOUNT')
-     password = System.getProperty('GMAIL_PASSWORD')
+     username = System.getenv('GMAIL_ACCOUNT')
+     password = System.getenv('GMAIL_PASSWORD')
      props = ["mail.smtp.auth":"true",
               "mail.smtp.socketFactory.port":"465",
               "mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",

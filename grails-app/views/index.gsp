@@ -34,6 +34,7 @@
         <th>Aktualisiert am</th>
         <th>Bezeichnung</th>
         <th>Status</th>
+        <th>Anzeigen</th>
         </thead>
         <tbody>
         <g:each in="${vorgangList}">
@@ -42,6 +43,7 @@
                 <td>${it.lastUpdated.format('dd.MM.yyyy')}</td>
                 <td>${it.bezeichnung}</td>
                 <td>${it.status}</td>
+                <td><a class="btn btn-success" href="/vorgang/show/${it.id}">Anzeigen</a></td>
             </tr>
         </g:each>
         </tbody>

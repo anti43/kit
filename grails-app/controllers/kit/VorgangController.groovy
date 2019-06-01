@@ -2,6 +2,7 @@ package kit
 
 import com.sun.javafx.collections.MappingChange
 import grails.converters.JSON
+import grails.plugin.asyncmail.AsynchronousMailService
 import grails.plugin.springsecurity.SpringSecurityService
 import grails.plugin.springsecurity.annotation.Secured
 import grails.validation.Validateable
@@ -16,7 +17,7 @@ class VorgangController {
     VorgangService vorgangService
     ImageService imageService
     SpringSecurityService springSecurityService
-    def mailService
+    AsynchronousMailService asynchronousMailService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
@@ -29,8 +30,14 @@ class VorgangController {
 
     @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
     def uebermitteln(Vorgang vorgang) {
+        log.info(params as String)
         if (vorgang == null) {
             notFound()
+            return
+        }
+        if(params.q!="on"){
+            flash.message = "Sie müssen bestätigen, dass Sie ein echter Mensch sind!"
+            redirect action:'show', id: vorgang.id
             return
         }
 
@@ -75,12 +82,13 @@ class VorgangController {
         }
 
         flash.message = "Ihr Anliegen wurde übermittelt. Sie können nun noch Bilder hinzufügen (Schaltfläche 'Bild hochladen')."
-        
-        mailService.sendMail {
-           to System.getProperty('ADMIN_EMAIL')
-           from System.getProperty('ADMIN_EMAIL') 
-           subject "Neuer Vorgang $vorgang"
-           text 'Ein neuer Vorgang wurde angelegt'
+        if(System.getenv('GMAIL_ACCOUNT')) {
+            asynchronousMailService.sendMail {
+                to System.getenv('GMAIL_ACCOUNT')
+                from System.getenv('GMAIL_ACCOUNT')
+                subject "Neuer Vorgang $vorgang"
+                text 'Ein neuer Vorgang wurde angelegt'
+            }
         }
 
         redirect action: 'show', id: vorgang.id
@@ -132,22 +140,38 @@ class VorgangController {
 
     @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
     def comment() {
+        log.info(params as String)
+        Vorgang vorgang = Vorgang.get(params.id)
+        if (vorgang == null) {
+            notFound()
+            return
+        }
+
+        if(params.q!="on"){
+            flash.message = "Sie müssen bestätigen, dass Sie ein echter Mensch sind!"
+            redirect action:'show', id: vorgang.id
+            return
+        }
+
         String text = params.text
         if (text?.trim()) {
             String name = params.name ?: springSecurityService.currentUser.username
             VorgangsKommentar k = new VorgangsKommentar()
             k.benutzer = name
             k.text = text
-            k.vorgang = Vorgang.get(params.id)
+            k.vorgang = vorgang
             k.save(flush: true, failOnError: true)
             flash.message = "Vielen Dank, ihr Kommentar wird in Kürze moderiert werden."
-            
-            mailService.sendMail {
-               to System.getProperty('ADMIN_EMAIL')
-               from System.getProperty('ADMIN_EMAIL') 
-               subject "Neuer Kommentar an Vorgang ${Vorgang.get(params.id)}"
-               text 'Ein neuer Kommentar wurde angelegt: $text'
+
+            if(System.getenv('GMAIL_ACCOUNT')){
+                asynchronousMailService.sendMail {
+                    to System.getenv('GMAIL_ACCOUNT')
+                    from System.getenv('GMAIL_ACCOUNT')
+                    subject "Neuer Kommentar an Vorgang ${vorgang}"
+                    html "Ein neuer Kommentar wurde angelegt: $text"
+                }
             }
+
         }
         redirect action: 'show', id: params.id
     }
@@ -276,6 +300,14 @@ class VorgangController {
         vorgang.addImage(file)
 
         flash.message = "Datei $file hinzugefügt!"
+        if(System.getenv('GMAIL_ACCOUNT')) {
+            asynchronousMailService.sendMail {
+                to System.getenv('GMAIL_ACCOUNT')
+                from System.getenv('GMAIL_ACCOUNT')
+                subject "Neues Bild an $vorgang"
+                text 'Ein neues Bild wurde hochgeladen'
+            }
+        }
 
         redirect action: 'show', id: vorgang.id
     }

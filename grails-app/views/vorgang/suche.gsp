@@ -18,8 +18,26 @@
             <g:if test="${flash.message}">
                 <div class="alert alert-warning" role="status">${flash.message}</div>
             </g:if>
-            <f:table collection="${vorgangList}" properties="bezeichnung,dateCreated,antragEingereichtAm"/>
-
+            <table>
+                <thead>
+                <th>Id</th>
+                <th>Aktualisiert am</th>
+                <th>Bezeichnung</th>
+                <th>Status</th>
+                <th>Anzeigen</th>
+                </thead>
+                <tbody>
+                <g:each in="${vorgangList}">
+                    <tr>
+                        <td><a href="/vorgang/show/${it.id}">${it.id}</a></td>
+                        <td>${it.lastUpdated.format('dd.MM.yyyy')}</td>
+                        <td>${it.bezeichnung}</td>
+                        <td>${it.status}</td>
+                        <td><a class="btn btn-success" href="/vorgang/show/${it.id}">Anzeigen</a></td>
+                    </tr>
+                </g:each>
+                </tbody>
+            </table>
             <div class="pagination">
                 <g:paginate total="${vorgangCount ?: 0}" />
             </div>

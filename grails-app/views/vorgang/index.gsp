@@ -26,6 +26,7 @@
                 <th>Bezeichnung</th>
                 <th>Status</th>
                 <th>Öffentlich</th>
+                <th>Anzeigen</th>
                 </thead>
                 <tbody>
                 <g:each in="${vorgangList}">
@@ -35,6 +36,7 @@
                         <td>${it.bezeichnung}</td>
                         <td>${it.status}</td>
                         <td>${it.oeffentlich}</td>
+                        <td><a class="btn btn-success" href="/vorgang/show/${it.id}">Anzeigen</a></td>
                     </tr>
                 </g:each>
                 </tbody>

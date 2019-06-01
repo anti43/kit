@@ -55,6 +55,12 @@
                 <input type="checkbox" name="initiatorVerstecken" id="initiatorVerstecken">
             </div>
 
+             <div class="fieldcontain">
+                <label for="q">Ich bin ein Mensch</label>
+                <input type="checkbox" name="q" id="q"><br>
+            </div>
+
+
         </fieldset>
         <fieldset class="buttons">
             <g:submitButton name="create" class="save" value="Absenden"/>

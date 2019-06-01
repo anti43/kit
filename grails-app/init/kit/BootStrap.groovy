@@ -1,8 +1,12 @@
 package kit
 
+import javax.print.DocFlavor
+
 class BootStrap {
 
     def init = { servletContext ->
+
+
         if(!Rolle.findByAuthority('ROLE_USERS')){
             Rolle r = new Rolle(authority: 'ROLE_USERS')
             r.save(flush: true)
