@@ -1,4 +1,3 @@
-
 // Added by the Spring Security Core plugin:
 grails.plugin.springsecurity.userLookup.userDomainClassName = 'kit.Benutzer'
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'kit.BenutzerRolle'
@@ -42,3 +41,16 @@ grails.mime.types = [
         xml:           ['text/xml', 'application/xml'],
         pdf:           'application/pdf'
 ]
+
+grails {
+   mail {
+     host = "smtp.gmail.com"
+     port = 465
+     username = System.getProperty('GMAIL_ACCOUNT')
+     password = System.getProperty('GMAIL_PASSWORD')
+     props = ["mail.smtp.auth":"true",
+              "mail.smtp.socketFactory.port":"465",
+              "mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",
+              "mail.smtp.socketFactory.fallback":"false"]
+   }
+}
