@@ -16,6 +16,7 @@ class VorgangController {
     VorgangService vorgangService
     ImageService imageService
     SpringSecurityService springSecurityService
+    def mailService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
@@ -74,6 +75,13 @@ class VorgangController {
         }
 
         flash.message = "Ihr Anliegen wurde übermittelt. Sie können nun noch Bilder hinzufügen (Schaltfläche 'Bild hochladen')."
+        
+        mailService.sendMail {
+           to System.getProperty('ADMIN_EMAIL')
+           from System.getProperty('ADMIN_EMAIL') 
+           subject "Neuer Vorgang $vorgang"
+           text 'Ein neuer Vorgang wurde angelegt'
+        }
 
         redirect action: 'show', id: vorgang.id
 
@@ -133,6 +141,13 @@ class VorgangController {
             k.vorgang = Vorgang.get(params.id)
             k.save(flush: true, failOnError: true)
             flash.message = "Vielen Dank, ihr Kommentar wird in Kürze moderiert werden."
+            
+            mailService.sendMail {
+               to System.getProperty('ADMIN_EMAIL')
+               from System.getProperty('ADMIN_EMAIL') 
+               subject "Neuer Kommentar an Vorgang ${Vorgang.get(params.id)}"
+               text 'Ein neuer Kommentar wurde angelegt: $text'
+            }
         }
         redirect action: 'show', id: params.id
     }
