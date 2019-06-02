@@ -2,13 +2,17 @@ package kit
 
 import com.sun.javafx.collections.MappingChange
 import grails.converters.JSON
-import grails.plugin.asyncmail.AsynchronousMailService
 import grails.plugin.springsecurity.SpringSecurityService
 import grails.plugin.springsecurity.annotation.Secured
+import grails.plugins.mail.MailService
 import grails.validation.Validateable
 import grails.validation.ValidationException
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.multipart.MultipartFile
+
+import java.util.concurrent.Executor
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 import static org.springframework.http.HttpStatus.*
 
@@ -17,10 +21,29 @@ class VorgangController {
     VorgangService vorgangService
     ImageService imageService
     SpringSecurityService springSecurityService
-    AsynchronousMailService asynchronousMailService
+    MailService mailService
+
+    ExecutorService executor = Executors.newFixedThreadPool(1)
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
+
+    private void mail(final String s, final String t ){
+        if(System.getenv('GMAIL_ACCOUNT')){
+            executor.submit({
+                try {
+                    mailService.sendMail {
+                        to System.getenv('GMAIL_ACCOUNT')
+                        from System.getenv('GMAIL_ACCOUNT')
+                        subject s
+                        html t
+                    }
+                } catch (e) {
+                    log.error(e.message, e)
+                }
+            })
+        }
+    }
 
     @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
     def neu() {
@@ -37,7 +60,7 @@ class VorgangController {
         }
         if(params.q!="on"){
             flash.message = "Sie müssen bestätigen, dass Sie ein echter Mensch sind!"
-            redirect action:'show', id: vorgang.id
+            redirect action:'neu', id: vorgang.id, params:params
             return
         }
 
@@ -82,14 +105,7 @@ class VorgangController {
         }
 
         flash.message = "Ihr Anliegen wurde übermittelt. Sie können nun noch Bilder hinzufügen (Schaltfläche 'Bild hochladen')."
-        if(System.getenv('GMAIL_ACCOUNT')) {
-            asynchronousMailService.sendMail {
-                to System.getenv('GMAIL_ACCOUNT')
-                from System.getenv('GMAIL_ACCOUNT')
-                subject "Neuer Vorgang $vorgang"
-                text 'Ein neuer Vorgang wurde angelegt'
-            }
-        }
+        mail("Neuer Vorgang $vorgang", 'Ein neuer Vorgang wurde angelegt')
 
         redirect action: 'show', id: vorgang.id
 
@@ -149,7 +165,7 @@ class VorgangController {
 
         if(params.q!="on"){
             flash.message = "Sie müssen bestätigen, dass Sie ein echter Mensch sind!"
-            redirect action:'show', id: vorgang.id
+            redirect action:'show', id: vorgang.id, params: params
             return
         }
 
@@ -163,14 +179,7 @@ class VorgangController {
             k.save(flush: true, failOnError: true)
             flash.message = "Vielen Dank, ihr Kommentar wird in Kürze moderiert werden."
 
-            if(System.getenv('GMAIL_ACCOUNT')){
-                asynchronousMailService.sendMail {
-                    to System.getenv('GMAIL_ACCOUNT')
-                    from System.getenv('GMAIL_ACCOUNT')
-                    subject "Neuer Kommentar an Vorgang ${vorgang}"
-                    html "Ein neuer Kommentar wurde angelegt: $text"
-                }
-            }
+            mail("Neuer Kommentar an Vorgang ${vorgang}", "Neuer Kommentar: $text")
 
         }
         redirect action: 'show', id: params.id
@@ -300,14 +309,7 @@ class VorgangController {
         vorgang.addImage(file)
 
         flash.message = "Datei $file hinzugefügt!"
-        if(System.getenv('GMAIL_ACCOUNT')) {
-            asynchronousMailService.sendMail {
-                to System.getenv('GMAIL_ACCOUNT')
-                from System.getenv('GMAIL_ACCOUNT')
-                subject "Neues Bild an $vorgang"
-                text 'Ein neues Bild wurde hochgeladen'
-            }
-        }
+        mail("Neues Bild an $vorgang",'Ein neues Bild wurde hochgeladen')
 
         redirect action: 'show', id: vorgang.id
     }

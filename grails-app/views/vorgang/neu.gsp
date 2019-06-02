@@ -34,12 +34,13 @@
                 <div class="fieldcontain required">
                     <label for="bezeichnung">Bezeichnung
                         <span class="required-indicator">*</span>
-                    </label><input type="text" name="bezeichnung" value="" required="" id="bezeichnung">
+                    </label>
+                    <input type="text" name="bezeichnung" value="${params.bezeichnung?:''}" required="" id="bezeichnung">
                 </div>
                 <div class="fieldcontain">
                 <label for="beschreibung">Beschreibung</label>
 
-                <textarea name="beschreibung" id="beschreibung"></textarea>
+                <textarea name="beschreibung" id="beschreibung" >${params.beschreibung?:''}</textarea>
             </div>
             <div class="fieldcontain">
                 <label for="vorschlagVon">Ihr Name</label>
@@ -47,7 +48,7 @@
             </div>
              <div class="fieldcontain">
                 <label for="vorschlagVon">Ihre Emailadresse für Rückfragen</label>
-                <input type="email" name="vorschlagVonEmail" value="" id="vorschlagVonEmail">
+                <input type="email" name="vorschlagVonEmail" value="${params.vorschlagVonEmail?:''}" id="vorschlagVonEmail">
             </div>
             <div class="fieldcontain">
                 <label for="initiatorVerstecken">Anonym bleiben (Ihr Name wird nicht angezeigt)</label>

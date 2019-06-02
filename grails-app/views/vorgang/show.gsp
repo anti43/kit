@@ -68,6 +68,7 @@
         <p>Erstellt: ${vorgang.dateCreated.format("dd.MM.yyyy")}</p>
         <p>Zuletzt bearbeitet: ${vorgang.lastUpdated.format("dd.MM.yyyy")}</p>
         <p>Aktueller Status: <b>${vorgang.status}</b></p>
+        <p>Zuständigkeit: <b>${vorgang.werIstZustaendig}</b></p>
     </div>
 
 
@@ -113,9 +114,9 @@
             <div class="card-body">
                 <g:form action="comment" id="${vorgang.id}">
                     <div class="form-group">
-                        Ihr Name (optional): <input name="name" type="text"/><br>
-                        Ich bin ein Mensch: <input type="checkbox" name="q"><br>
-                        Kommentar: <textarea name="text" class="form-control nomce" rows="3"></textarea>
+                        Ihr Name (optional): <input name="name" type="text" value="${params.name?:''}"/><br>
+                        Ich bin ein Mensch: <input type="checkbox" name="q" ><br>
+                        Kommentar: <textarea name="text" class="form-control nomce" rows="3" value="${params.text?:''}"></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary">Absenden</button>
                 </g:form>

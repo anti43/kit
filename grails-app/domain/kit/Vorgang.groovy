@@ -10,10 +10,11 @@ class Vorgang {
 
     String bezeichnung
     String beschreibung, bemerkungen, begründung, vorschlagVon,vorschlagVonEmail
+
     Boolean oeffentlich = false
     Boolean initiatorVerstecken = false
 
-
+    String werIstZustaendig = 'Unklar'
     String status = "Neu"
 
 
@@ -40,7 +41,8 @@ class Vorgang {
         antragEingereichtAm nullable: true
         antragEntschiedenAm nullable: true
 
-        status inList: ["Neu", "Wird diskutiert", "Abgelehnt", "Angenommen", "Zuständigkeit unklar"]
+        status inList: ["Neu", "Abgelehnt", "Angenommen", "Wird diskutiert", "Wartend"]
+        werIstZustaendig inList: ["Gemeinderat", "Ortsrat", "Wird diskutiert", "Zuständigkeit unklar"]
 
         begründung widget: 'textarea', nullable: true
 
@@ -54,6 +56,7 @@ class Vorgang {
         bemerkungen  sqlType: 'TEXT'
         begründung  sqlType: 'TEXT'
         vorschlagVon  sqlType: 'TEXT'
+        werIstZustaendig  sqlType: 'TEXT'
     }
 
     DateiAnhang addImage(Map map) {
