@@ -17,10 +17,30 @@ class BootStrap {
             r.save(flush: true)
         }
 
-        if(!Benutzer.findByUsername('Grüne OV Perl')){
+        String adminPass = System.getenv('ADMINPASS')
+        if(!Benutzer.findByUsername('admin')){
             Benutzer b = new Benutzer()
-            b.username = 'Grüne OV Perl'
-            b.password = 'greenhouseeffect'
+            b.username = 'admin'
+            b.password = adminPass
+            b.save(flush: true, failOnError: true)
+
+            BenutzerRolle bn = new BenutzerRolle()
+            bn.rolle = Rolle.findByAuthority('ROLE_USERS')
+            bn.benutzer = b
+            bn.save(flush: true, failOnError: true)
+
+            BenutzerRolle bn2 = new BenutzerRolle()
+            bn2.rolle = Rolle.findByAuthority('ROLE_ADMIN')
+            bn2.benutzer = b
+            bn2.save(flush: true, failOnError: true)
+        }
+
+        String mainUser = System.getenv('USER')
+        String mainUserPass = System.getenv('PASS')
+        if(!Benutzer.findByUsername(mainUser)){
+            Benutzer b = new Benutzer()
+            b.username = mainUser
+            b.password = mainUserPass
             b.save(flush: true, failOnError: true)
 
             BenutzerRolle bn = new BenutzerRolle()

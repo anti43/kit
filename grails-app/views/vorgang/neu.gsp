@@ -32,13 +32,13 @@
 
             <fieldset class="form">
                 <div class="fieldcontain required">
-                    <label for="bezeichnung">Bezeichnung
+                    <label for="bezeichnung">Betreff (worum geht es?)
                         <span class="required-indicator">*</span>
                     </label>
                     <input type="text" name="bezeichnung" value="${params.bezeichnung?:''}" required="" id="bezeichnung">
                 </div>
                 <div class="fieldcontain">
-                <label for="beschreibung">Beschreibung</label>
+                <label for="beschreibung">Beschreiben Sie Ihr Anliegen:</label>
 
                 <textarea name="beschreibung" id="beschreibung" >${params.beschreibung?:''}</textarea>
             </div>
@@ -63,9 +63,10 @@
 
 
         </fieldset>
-        <fieldset class="buttons">
-            <g:submitButton name="create" class="save" value="Absenden"/>
-        </fieldset>
+
+            <p align="center"><g:submitButton name="create" class="btn btn-success centered" value="Absenden" /> </p>
+        <br>
+        <br>
     </g:form>
 </div>
 </body>

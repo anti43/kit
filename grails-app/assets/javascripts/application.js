@@ -14,8 +14,8 @@ tinymce.init({
     selector: 'textarea:not(.nomce)',
     height: 250,
     theme: 'modern',
-    plugins: 'searchreplace autolink directionality visualblocks visualchars image link table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists textcolor wordcount imagetools  contextmenu colorpicker textpattern help',
-    toolbar1: 'formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat',
+    plugins: '',
+    toolbar1: 'formatselect | bold italic | link | numlist | removeformat',
     image_advtab: true,
     //templates: "/template/list",
     content_css: [

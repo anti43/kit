@@ -62,7 +62,7 @@
             Willkommen im Bürgerinformations-Portal!<br>
             Sie haben Fragen? <a href="/faq">Hier</a> finden Sie einige Antworten.
             Sie können sich auch gerne per Email an uns wenden.
-            Adresse: <a href="mailto:gruene@gemeinde-perl.de">gruene@gemeinde-perl.de</a>
+            Adresse: <a href="mailto:${System.getenv('CONTACT_EMAIL')}">${System.getenv('CONTACT_EMAIL')}</a>
         </div>
     </div>
     <!-- Search Widget -->
