@@ -47,8 +47,8 @@
                 <input type="text" name="vorschlagVon" value="" id="vorschlagVon">
             </div>
              <div class="fieldcontain">
-                <label for="vorschlagVon">Ihre Emailadresse für Rückfragen</label>
-                <input type="email" name="vorschlagVonEmail" value="${params.vorschlagVonEmail?:''}" id="vorschlagVonEmail">
+                <label for="vorschlagVon">Ihre Emailadresse oder Telefonnummer für Rückfragen</label>
+                <input type="text" name="vorschlagVonEmail" value="${params.vorschlagVonEmail?:''}" id="vorschlagVonEmail">
             </div>
             <div class="fieldcontain">
                 <label for="initiatorVerstecken">Anonym bleiben (Ihr Name wird nicht angezeigt)</label>
@@ -57,8 +57,8 @@
             </div>
 
              <div class="fieldcontain">
-                <label for="q">Ich bin ein Mensch</label>
-                <input type="checkbox" name="q" id="q"><br>
+                <label for="q">Ich bin ein echter Mensch</label>
+                <input required type="checkbox" name="q" id="q"><br>
             </div>
 
 

@@ -14,7 +14,7 @@ class Vorgang {
     Boolean oeffentlich = false
     Boolean initiatorVerstecken = false
 
-    String werIstZustaendig = 'Unklar'
+    String werIstZustaendig = 'nicht festgestellt'
     String status = "Neu"
 
 
@@ -42,7 +42,7 @@ class Vorgang {
         antragEntschiedenAm nullable: true
 
         status inList: ["Neu", "Abgelehnt", "Angenommen", "Wird diskutiert", "Wartend"]
-        werIstZustaendig inList: ["Gemeinderat", "Ortsrat", "Wird diskutiert", "Zuständigkeit unklar"]
+        werIstZustaendig inList: ["Gemeinderat", "Ortsrat", "Sonstiges", "nicht festgestellt"]
 
         begründung widget: 'textarea', nullable: true
 
