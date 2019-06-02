@@ -29,12 +29,12 @@ class VorgangController {
 
 
     private void mail(final String s, final String t ){
-        if(System.getenv('GMAIL_ACCOUNT')){
+        if(kit.Vorgang.getLocalProperty('GMAIL_ACCOUNT')){
             executor.submit({
                 try {
                     mailService.sendMail {
-                        to System.getenv('GMAIL_ACCOUNT')
-                        from System.getenv('GMAIL_ACCOUNT')
+                        to kit.Vorgang.getLocalProperty('GMAIL_ACCOUNT')
+                        from kit.Vorgang.getLocalProperty('GMAIL_ACCOUNT')
                         subject s
                         html t
                     }

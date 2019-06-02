@@ -17,7 +17,7 @@ class BootStrap {
             r.save(flush: true)
         }
 
-        String adminPass = System.getenv('ADMINPASS')
+        String adminPass = kit.Vorgang.getLocalProperty('ADMINPASS')
         if(!Benutzer.findByUsername('admin')){
             Benutzer b = new Benutzer()
             b.username = 'admin'
@@ -35,8 +35,8 @@ class BootStrap {
             bn2.save(flush: true, failOnError: true)
         }
 
-        String mainUser = System.getenv('USER')
-        String mainUserPass = System.getenv('PASS')
+        String mainUser = kit.Vorgang.getLocalProperty('USER')
+        String mainUserPass = kit.Vorgang.getLocalProperty('PASS')
         if(!Benutzer.findByUsername(mainUser)){
             Benutzer b = new Benutzer()
             b.username = mainUser

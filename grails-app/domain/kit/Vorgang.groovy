@@ -87,4 +87,8 @@ class Vorgang {
     List<VorgangsLog> getLog() {
         VorgangsLog.findAllByVorgang(this)
     }
+
+    static String getLocalProperty(String key){
+        return System.getenv(key)?:System.getProperty(key)
+    }
 }
