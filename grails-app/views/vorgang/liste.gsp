@@ -1,5 +1,7 @@
 <!DOCTYPE html>
+<g:set var="springSecurityService" bean="springSecurityService"/>
 <html>
+
     <head>
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'vorgang.label', default: 'Vorgang')}" />
@@ -10,7 +12,9 @@
         <div class="nav" role="navigation">
             <ul>
                 <li><a class="home" href="${createLink(uri: '/')}">Startseite</a></li>
-                <li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
+                <g:if test="${!(springSecurityService?.currentUser instanceof kit.Benutzer)}">
+                    <div class="btn btn-success"> <a style="color:white" href="/vorgang/neu" class="nav-link">Neues Anliegen übermitteln</a></div>
+                </g:if>
             </ul>
         </div>
         <div id="list-vorgang" class="content scaffold-list" role="main">
