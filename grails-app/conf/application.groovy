@@ -41,10 +41,8 @@ grails.mime.types = [
         xml:           ['text/xml', 'application/xml'],
         pdf:           'application/pdf'
 ]
-
 grails {
    mail {
-     poolSize = 2
      host = "smtp.gmail.com"
      port = 465
      username = System.getenv('GMAIL_ACCOUNT')
@@ -55,3 +53,4 @@ grails {
               "mail.smtp.socketFactory.fallback":"false"]
    }
 }
+grails.mail.poolSize = 1
