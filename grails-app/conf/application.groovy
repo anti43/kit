@@ -30,6 +30,9 @@ grails.mime.types = [
         all:           '*/*',
         png:           'image/png',
         PNG:           'image/png',
+        jpg:           'image/jpg',
+        JPG:           'image/jpg',
+        jpeg:           'image/jpg',
         atom:          'application/atom+xml',
         css:           'text/css',
         csv:           'text/csv',
@@ -41,7 +44,8 @@ grails.mime.types = [
         rss:           'application/rss+xml',
         text:          'text/plain',
         xml:           ['text/xml', 'application/xml'],
-        pdf:           'application/pdf'
+        pdf:           'application/pdf',
+        PDF:           'application/pdf'
 ]
 grails {
    mail {
