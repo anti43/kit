@@ -21,13 +21,14 @@ class VorgangsKategorieController {
             return
         }
 
-        flash.message = "Alle Vorgänge for Kategorie $id"
-        render view: '/vorgang/index', model: [vorgangList: Vorgang.createCriteria().list {
+        def gf = Vorgang.createCriteria().list {
             kategorien {
-
                 'in'('name', [id])
             }
-        }]
+        } as List
+
+        flash.message = "${gf?gf.size():'Keine'} Vorgänge for Kategorie $id gefunden"
+        render view: '/vorgang/liste', model: [vorgangList: gf, vorgangCount: gf.size()]
     }
 
     def index(Integer max) {

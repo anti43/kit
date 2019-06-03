@@ -12,7 +12,12 @@
 
     <asset:stylesheet src="application.css"/>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.7.4/skins/lightgray/skin.min.css"/>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.7.4/skins/lightgray/skin.mobile.min.css"/>
+
     <g:layoutHead/>
+    <asset:javascript src="application.js"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.7.4/tinymce.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.7.4/jquery.tinymce.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.7.4/plugins/autolink/plugin.min.js"></script>
@@ -21,9 +26,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.7.4/plugins/imagetools/plugin.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.7.4/plugins/paste/plugin.min.js"></script>
 
-    <asset:javascript src="application.js"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.7.4/skins/lightgray/skin.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.7.4/skins/lightgray/skin.mobile.min.css" />
 
 </head>
 
@@ -86,6 +88,45 @@
 
 
 <asset:javascript src="application.js"/>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-75465590-2"></script>
+<script>
+
+
+
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-75465590-2');
+
+    $(document).ready(function () {
+        tinymce.init({
+            selector: 'textarea:not(.nomce)',
+            height: 250,
+            theme: 'modern',
+            plugins: '',
+            toolbar1: 'formatselect | bold italic | link | numlist | removeformat',
+            image_advtab: true,
+            //templates: "/template/list",
+
+            setup: function (editor) {
+                editor.getElement().removeAttribute('required');
+            }
+        });
+
+        $('table.data').DataTable({
+            "bInfo": false,
+            "paging": false,
+            "bPaginate": false,
+            "searching": false,
+            "ordering": false
+        });
+    });
+</script>
 </body>
 
 </html>

@@ -1,4 +1,4 @@
-import kit.Vorgang
+
 
 // Added by the Spring Security Core plugin:
 grails.plugin.springsecurity.userLookup.userDomainClassName = 'kit.Benutzer'
@@ -51,8 +51,8 @@ grails {
    mail {
      host = "smtp.gmail.com"
      port = 465
-     username = kit.Vorgang.getLocalProperty('GMAIL_ACCOUNT')
-     password = kit.Vorgang.getLocalProperty('GMAIL_PASSWORD')
+     username = System.getenv('GMAIL_ACCOUNT') ?: System.getProperty('GMAIL_ACCOUNT')
+     password = System.getenv('GMAIL_PASSWORD') ?: System.getProperty('GMAIL_PASSWORD')
      props = ["mail.smtp.auth":"true",
               "mail.smtp.socketFactory.port":"465",
               "mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",
@@ -60,3 +60,4 @@ grails {
    }
 }
 grails.mail.poolSize = 1
+

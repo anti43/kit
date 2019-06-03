@@ -1,7 +1,6 @@
 package kit
 
-import com.sun.javafx.collections.MappingChange
-import grails.converters.JSON
+
 import grails.plugin.springsecurity.SpringSecurityService
 import grails.plugin.springsecurity.annotation.Secured
 import grails.plugins.mail.MailService
@@ -10,7 +9,6 @@ import grails.validation.ValidationException
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.multipart.MultipartFile
 
-import java.util.concurrent.Executor
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -113,25 +111,32 @@ class VorgangController {
 
     @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
     def suche() {
-        params.max = Math.min(params.max ?: 10, 100)
+        params.max = 1000
         String q = params.remove('q')
         def x = Vorgang.findAllByBezeichnungRlikeAndOeffentlich(q, true, params)
         def y = Vorgang.findAllByBeschreibungRlikeAndOeffentlich(q, true, params)
         def z = (x + y).sort { it.lastUpdated.time }.reverse()
-        flash.message = "Ergebnis für Suchwort '$q'"
-        respond z, model: [vorgangCount: z.size()]
+        if(q){
+            flash.message = "Ergebnis für Suchwort '$q'"
+        }
+        if(!z){
+            flash.message = "Kein Ergebnis für Suchwort '$q' gefunden!"
+        }
+        render view: 'liste', model: [vorgangList: z, vorgangCount: z.size()]
     }
 
     @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
     def liste(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
+        flash.message = "Verwenden Sie gegebenenfalls die Suche."
+        params.max = 1000
+        params.sort = "dateCreated"
+        params.order = "desc"
         respond Vorgang.findAllByOeffentlich(true, params), model: [vorgangCount: Vorgang.countByOeffentlich(true)]
     }
 
 
     def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond Vorgang.findAll(params), model: [vorgangCount: vorgangService.count()]
+        redirect action: 'liste'
     }
 
     def publish(Long id){

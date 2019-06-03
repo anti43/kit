@@ -40,3 +40,8 @@ footer {
 .navbar-brand {
     background-color: white;
 }
+
+.content h1 {
+    margin: 0;
+    padding: 0;
+}

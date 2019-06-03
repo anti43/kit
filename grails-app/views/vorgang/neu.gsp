@@ -32,10 +32,10 @@
 
             <fieldset class="form">
                 <div class="fieldcontain required">
-                    <label for="bezeichnung">Betreff (worum geht es?)
+                    <label for="bezeichnung">Betreff (worum geht es?):
                         <span class="required-indicator">*</span>
                     </label>
-                    <input type="text" name="bezeichnung" value="${params.bezeichnung?:''}" required="" id="bezeichnung">
+                    <input type="text" style="width: 100%;" name="bezeichnung" value="${params.bezeichnung?:''}" required="" id="bezeichnung">
                 </div>
                 <div class="fieldcontain">
                 <label for="beschreibung">Beschreiben Sie Ihr Anliegen:</label>

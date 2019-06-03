@@ -89,6 +89,6 @@ class Vorgang {
     }
 
     static String getLocalProperty(String key){
-        return System.getenv(key)?:System.getProperty(key)
+        return System.getenv(key)?:System.getProperty(key)?:'nullinger'
     }
 }

@@ -71,13 +71,10 @@
 
         <div class="card-body">
             <div class="input-group">
-                <g:form controller="vorgang" action="suche">
+                <g:form controller="vorgang" action="suche" class="form-inline">
                     <input name="q" type="text" class="form-control" placeholder="Suche nach...">
-                    <span class="input-group-btn">
-                        <button class="btn btn-secondary" type="submit">Los!</button>
-                    </span>
+                    &nbsp;<button class="btn btn-secondary" type="submit">Los!</button>
                 </g:form>
-
             </div>
         </div>
     </div>

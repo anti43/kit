@@ -93,30 +93,33 @@ endpoints:
         unique-names: true
 
 ---
-hibernate:
-    dialect: org.hibernate.dialect.PostgreSQLDialect
-    cache:
-        queries: false
-        use_second_level_cache: false
-        use_query_cache: false
-dataSource:
-    pooled: true
-    jmxExport: true
-    driverClassName: org.postgresql.Driver
-    username: ${JDBC_USER}
-    password: ${JDBC_PASSWORD}
-
 environments:
     development:
+        hibernate:
+            dialect: org.hibernate.dialect.H2Dialect
+            cache:
+                queries: false
+                use_second_level_cache: false
+                use_query_cache: false
         dataSource:
-            dbCreate: update
-            url: jdbc:postgresql://${JDBC_URL}:5432/kit
-    test:
-        dataSource:
+            driverClassName: org.h2.Driver
+            username: 'sa'
+            password: ''
             dbCreate: update
             url: jdbc:h2:mem:testDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
     production:
+        hibernate:
+            dialect: org.hibernate.dialect.PostgreSQLDialect
+            cache:
+                queries: false
+                use_second_level_cache: false
+                use_query_cache: false
         dataSource:
+            pooled: true
+            jmxExport: true
+            driverClassName: org.postgresql.Driver
+            username: ${JDBC_USER}
+            password: ${JDBC_PASSWORD}
             dbCreate: update
             url: jdbc:postgresql://${JDBC_URL}:5432/kit
 

@@ -13,41 +13,64 @@
             <ul>
                 <li><a class="home" href="${createLink(uri: '/')}">Startseite</a></li>
                 <g:if test="${!(springSecurityService?.currentUser instanceof kit.Benutzer)}">
-                    <div class="btn btn-success"> <a style="color:white" href="/vorgang/neu" class="nav-link">Neues Anliegen übermitteln</a></div>
+                    <li>
+                        <a style="color:white" href="/vorgang/neu" class="btn btn-success">Neues Anliegen übermitteln</a>
+                    </li>
                 </g:if>
             </ul>
         </div>
         <div id="list-vorgang" class="content scaffold-list" role="main">
-            <h1>Alle öffentlichen Vorgänge</h1>
+            <h1>Öffentliche Vorgänge</h1>
+            <p>&nbsp;</p>
             <g:if test="${flash.message}">
-                <div class="alert alert-warning" role="status">${flash.message}</div>
+                <div class="alert alert-info" role="status">${flash.message}</div>
             </g:if>
 
-            <table>
-                <thead>
-                <th>Id</th>
-                <th>Aktualisiert am</th>
-                <th>Bezeichnung</th>
-                <th>Status</th>
-                <th>Öffentlich</th>
-                <th>Anzeigen</th>
-                </thead>
-                <tbody>
-                <g:each in="${vorgangList}">
-                    <tr>
-                        <td><a href="/vorgang/show/${it.id}">${it.id}</a></td>
-                        <td>${it.lastUpdated.format('dd.MM.yyyy')}</td>
-                        <td>${it.bezeichnung}</td>
-                        <td>${it.status}</td>
-                        <td>${it.oeffentlich}</td>
-                        <td><a class="btn btn-success" href="/vorgang/show/${it.id}">Anzeigen</a></td>
-                    </tr>
-                </g:each>
-                </tbody>
-            </table>
-            <div class="pagination">
-                <g:paginate total="${vorgangCount ?: 0}" />
+            <div class="card my-4">
+                <h5 class="card-header">Suche</h5>
+
+                <div class="card-body">
+                    <div class="input-group">
+                        <g:form controller="vorgang" action="suche" class="form-inline">
+                            <input name="q" type="text" class="form-control" placeholder="Suche nach...">
+                            <button class="btn btn-info" type="submit">Los!</button>
+                        </g:form>&nbsp;
+                        <g:form controller="vorgang" action="liste" class="form-inline">
+                            <button class="btn btn-secondary" type="submit">Alle anzeigen</button>
+                        </g:form>
+                    </div>
+                </div>
             </div>
+
+            <g:if test="${vorgangList}">
+                <table class="data">
+                    <thead>
+                    <th>Id</th>
+                    <th>Aktualisiert am</th>
+                    <th>Bezeichnung</th>
+                    <th>Status</th>
+                    <th>Öffentlich</th>
+                    <th>Anzeigen</th>
+                    </thead>
+                    <tbody>
+                    <g:each in="${vorgangList}">
+                        <tr>
+                            <td><a href="/vorgang/show/${it.id}">${it.id}</a></td>
+                            <td>${it.lastUpdated.format('dd.MM.yyyy')}</td>
+                            <td>${it.bezeichnung}</td>
+                            <td>${it.status}</td>
+                            <td>${it.oeffentlich}</td>
+                            <td><a class="btn btn-success" href="/vorgang/show/${it.id}">Anzeigen</a></td>
+                        </tr>
+                    </g:each>
+                    </tbody>
+                </table>
+                <div class="pagination">
+                    <g:paginate total="${vorgangCount ?: 0}" />
+                </div>
+            </g:if>
+
         </div>
+
     </body>
 </html>

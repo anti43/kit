@@ -18,8 +18,23 @@
             <g:if test="${flash.message}">
                 <div class="message" role="status">${flash.message}</div>
             </g:if>
-            <f:table collection="${impressumList}" properties="bezeichnung, text"/>
 
+            <table>
+                <thead>
+                <th>Id</th>
+                <th>Bezeichnung</th>
+                <th>Text</th>
+                </thead>
+                <tbody>
+                <g:each in="${impressumList}">
+                    <tr>
+                        <td><a href="/impressum/edit/${it.id}">${it.id}</a></td>
+                        <td>${it.bezeichnung?.encodeAsRaw()}:</td>
+                        <td>${it.text?.encodeAsRaw()}</td>
+                    </tr>
+                </g:each>
+                </tbody>
+            </table>
             <div class="pagination">
                 <g:paginate total="${impressumCount ?: 0}" />
             </div>

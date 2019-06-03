@@ -23,13 +23,13 @@ class GemeindeteilController {
             return
         }
 
-        flash.message = "Alle Vorgänge for Ortschaft $id"
-        def gf = Vorgang.createCriteria().list {
+        List gf = Vorgang.createCriteria().list {
             ortschaften {
                 'in'('name', [id])
             }
-        }
-        render view: '/vorgang/index', model: [vorgangList: gf]
+        } as List
+        flash.message = "${gf?gf.size():'Keine'} Vorgänge for Ortschaft $id gefunden"
+        render view: '/vorgang/liste', model: [vorgangList: gf, vorgangCount: gf.size()]
     }
 
 
