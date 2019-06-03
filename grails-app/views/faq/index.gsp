@@ -18,8 +18,22 @@
             <g:if test="${flash.message}">
                 <div class="message" role="status">${flash.message}</div>
             </g:if>
-            <f:table collection="${faqList}" />
-
+            <table>
+                <thead>
+                <th>Id</th>
+                <th>Frage</th>
+                <th>Antwort</th>
+                </thead>
+                <tbody>
+                <g:each in="${faqList}">
+                    <tr>
+                        <td><a href="/faq/edit/${it.id}">${it.id}</a></td>
+                        <td>${it.frage?.encodeAsRaw()}</td>
+                        <td>${it.antwort?.encodeAsRaw()}</td>
+                    </tr>
+                </g:each>
+                </tbody>
+            </table>
             <div class="pagination">
                 <g:paginate total="${faqCount ?: 0}" />
             </div>
