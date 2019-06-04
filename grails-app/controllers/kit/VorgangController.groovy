@@ -56,11 +56,6 @@ class VorgangController {
             notFound()
             return
         }
-        if(params.q!="on"){
-            flash.message = "Sie müssen bestätigen, dass Sie ein echter Mensch sind!"
-            redirect action:'neu', id: vorgang.id, params:params
-            return
-        }
 
         vorgang.ortschaften = [] as Set
         vorgang.kategorien = [] as Set

@@ -76,10 +76,11 @@
 
 
         <!-- Preview Image -->
-        <% if(vorgang.bilder){%>
-        <img height="200px" class="img-fluid rounded" src="/dateiAnhang/render/${vorgang.bilder.sort{it.id}.find().id}" alt="">
-        <hr>
-        <%}%>
+        <g:if test="${(vorgang.bilder)}">
+            <img style="max-height: 300px;" class="img-fluid rounded" src="/dateiAnhang/render/${vorgang.bilder.sort{it.id}.last().id}" alt="">
+            <hr>
+        </g:if>
+
 
         <!-- Post Content -->
         <% if(vorgang.beschreibung){%>

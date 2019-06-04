@@ -56,12 +56,6 @@
                 <input type="checkbox" name="initiatorVerstecken" id="initiatorVerstecken">
             </div>
 
-             <div class="fieldcontain">
-                <label for="q">Ich bin ein echter Mensch</label>
-                <input required type="checkbox" name="q" id="q"><br>
-            </div>
-
-
         </fieldset>
 
             <p align="center"><g:submitButton name="create" class="btn btn-success centered" value="Absenden" /> </p>
