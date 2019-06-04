@@ -35,7 +35,7 @@
         <g:if test="${vorgang.antragEingereichtAm && !vorgang.antragEntschiedenAm}">
             <div class="alert alert-success">
                 <h2>Antrag im zuständigen Gremium eingreicht</h2>
-                <blockquote class="blockquote">
+                <blockquote >
                     <p class="mb-0">
                         am&nbsp;${vorgang.antragEingereichtAm.format('dd.MM.yyyy')}
                     </p>
@@ -54,7 +54,7 @@
             %>
             <div class="alert alert-${cssclass}">
          <h2>Entscheidung bereits getroffen</h2>
-         <blockquote class="blockquote">
+         <blockquote >
              <p class="mb-0">
                     am&nbsp;${vorgang.antragEntschiedenAm.format('dd.MM.yyyy')}
                 </p>
@@ -91,7 +91,7 @@
 
         <% if(vorgang.bemerkungen){%>
         <h2>Bemerkungen</h2>
-        <blockquote class="blockquote">
+        <blockquote >
             <p class="mb-0">
                 ${vorgang.bemerkungen.encodeAsRaw()}
             </p>
@@ -101,7 +101,7 @@
 
          <g:if test="${vorgang.begründung}">
              <h2>Begründung der Entscheidung</h2>
-             <blockquote class="blockquote">
+             <blockquote >
                  <p class="mb-0">
                      ${vorgang.begründung.encodeAsRaw()}
                  </p>
@@ -160,8 +160,9 @@
                 <g:uploadForm name="uploadFeaturedImage" action="uploadImage" class="form form-inline" style="width: 250px">
                     <g:hiddenField name="id" value="${this.vorgang?.id}" />
                     <g:hiddenField name="version" value="${this.vorgang?.version}" />
-                    <input type="file" name="featuredImageFile" id="featuredImageFile" onchange="$('#fileUpload').click()"/>
+                    <input style="height: 1px;width:1px; margin:0;padding:0;" type="file" name="featuredImageFile" id="featuredImageFile" onchange="$('#fileUpload').click()"/>
                     <input id="fileUpload" class="save" type="submit" value="Bild hochladen" onmousedown="if(!$('#featuredImageFile').val())$('#featuredImageFile').click();"/>
+                    <small>Wir weisen ausdrücklich darauf hin, dass hochgeladene Fotos keine Personen zeigen dürfen und die Veröffentlichung genehmigt sein muss.</small>
                 </g:uploadForm>
             </fieldset>
         </div>

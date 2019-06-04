@@ -101,7 +101,7 @@
     }
 
     gtag('js', new Date());
-    gtag('config', 'UA-75465590-2');
+    gtag('config', 'UA-75465590-2', { 'anonymize_ip': true });
 
     $(document).ready(function () {
         tinymce.init({

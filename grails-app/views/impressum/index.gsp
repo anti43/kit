@@ -29,7 +29,7 @@
                 <g:each in="${impressumList}">
                     <tr>
                         <td><a href="/impressum/edit/${it.id}">${it.id}</a></td>
-                        <td>${it.bezeichnung?.encodeAsRaw()}:</td>
+                        <td>${it.bezeichnung?.encodeAsRaw()}</td>
                         <td>${it.text?.encodeAsRaw()}</td>
                     </tr>
                 </g:each>

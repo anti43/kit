@@ -13,7 +13,9 @@ class ImpressumController {
 
     @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
     def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
+        params.max = 100
+        params.sort = "id"
+        params.order = "asc"
         respond impressumService.list(params), model:[impressumCount: impressumService.count()]
     }
 
