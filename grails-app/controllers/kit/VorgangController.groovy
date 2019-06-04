@@ -110,7 +110,7 @@ class VorgangController {
         String q = params.remove('q')
         def x = Vorgang.findAllByBezeichnungRlikeAndOeffentlich(q, true, params)
         def y = Vorgang.findAllByBeschreibungRlikeAndOeffentlich(q, true, params)
-        def z = (x + y).sort { it.lastUpdated.time }.reverse()
+        def z = ((x + y).sort { it.lastUpdated.time }.reverse()) as Set
         if(q){
             flash.message = "Ergebnis für Suchwort '$q'"
         }
