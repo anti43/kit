@@ -41,13 +41,7 @@ class FaqController {
             return
         }
 
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'faq.label', default: 'Faq'), faq.id])
-                redirect faq
-            }
-            '*' { respond faq, [status: CREATED] }
-        }
+        redirect action:'index'
     }
 
     def edit(Long id) {
