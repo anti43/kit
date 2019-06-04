@@ -106,7 +106,7 @@ class VorgangController {
 
     @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
     def suche() {
-        params.max = 1000
+        params.max = 25
         String q = params.remove('q')
         def x = Vorgang.findAllByBezeichnungRlikeAndOeffentlich(q, true, params)
         def y = Vorgang.findAllByBeschreibungRlikeAndOeffentlich(q, true, params)
@@ -123,7 +123,7 @@ class VorgangController {
     @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
     def liste(Integer max) {
         flash.message = "Verwenden Sie gegebenenfalls die Suche."
-        params.max = 1000
+        params.max = 100
         params.sort = "dateCreated"
         params.order = "desc"
         respond Vorgang.findAllByOeffentlich(true, params), model: [vorgangCount: Vorgang.countByOeffentlich(true)]

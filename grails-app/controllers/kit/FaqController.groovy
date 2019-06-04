@@ -2,6 +2,7 @@ package kit
 
 import grails.plugin.springsecurity.annotation.Secured
 import grails.validation.ValidationException
+
 import static org.springframework.http.HttpStatus.*
 
 class FaqController {
@@ -13,7 +14,9 @@ class FaqController {
 
     @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
     def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
+        params.max = 100
+        params.sort = "id"
+        params.order = "asc"
         respond faqService.list(params), model:[faqCount: faqService.count()]
     }
 
