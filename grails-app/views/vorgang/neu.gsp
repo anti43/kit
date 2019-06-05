@@ -44,18 +44,25 @@
             </div>
             <div class="fieldcontain">
                 <label for="vorschlagVon">Ihr Name</label>
-                <input type="text" name="vorschlagVon" value="" id="vorschlagVon">
+                <input type="text" required name="vorschlagVon" value="" id="vorschlagVon">
             </div>
              <div class="fieldcontain">
-                <label for="vorschlagVon">Ihre Emailadresse oder Telefonnummer für Rückfragen</label>
-                <input type="text" name="vorschlagVonEmail" value="${params.vorschlagVonEmail?:''}" id="vorschlagVonEmail">
+                <label for="vorschlagVon">Ihre Emailadresse oder Telefonnummer (nur für Rückfragen)</label>
+                <input type="text" required name="vorschlagVonEmail" value="${params.vorschlagVonEmail?:''}" id="vorschlagVonEmail">
+                 <br><small>Hinweis: Falls wir ihren Namen/Emailadresse nicht verifizieren können, werden wir Ihr Anliegen umgehend löschen</small>
             </div>
             <div class="fieldcontain">
                 <label for="initiatorVerstecken">Anonym bleiben (Ihr Name wird nicht angezeigt)</label>
                 <input type="hidden" name="_initiatorVerstecken">
                 <input type="checkbox" name="initiatorVerstecken" id="initiatorVerstecken">
             </div>
-
+            <div class="fieldcontain">
+               <label for="initiatorVerstecken">Ich bin mit der Speicherung der personenbezogenen Daten (Name, Email) einverstanden</label>
+               <input type="hidden" name="daten">
+               <input type="checkbox"  required name="daten" id="daten">
+               <br><small>Gemäß § 35 BDSG können Sie jederzeit die Berichtigung, Löschung und Sperrung einzelner personenbezogener Daten verlangen.
+                Senden Sie uns in dem Falle dazu eine Email an: gruene@gemeinde-perl.de</small>
+            </div>
         </fieldset>
 
             <p align="center"><g:submitButton name="create" class="btn btn-success centered" value="Absenden" /> </p>

@@ -48,6 +48,25 @@ class VorgangController {
         respond new Vorgang(params)
     }
 
+    @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
+    def zustaendigkeit(String id) {
+
+        if (id == 'Alle') {
+            forward controller: 'vorgang', action: 'index'
+            return
+        }
+
+        def gf = Vorgang.createCriteria().list {
+            if (!(springSecurityService.currentUser instanceof kit.Benutzer)) {
+                eq("oeffentlich", true)
+            }
+            eq("werIstZustaendig", id)
+        } as List
+
+        flash.message = "${gf ? gf.size() : 'Keine'} Vorgänge for Kategorie $id gefunden"
+        render view: '/vorgang/liste', model: [vorgangList: gf, vorgangCount: gf.size()]
+    }
+
 
     @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
     def uebermitteln(Vorgang vorgang) {
@@ -108,8 +127,17 @@ class VorgangController {
     def suche() {
         params.max = 25
         String q = params.remove('q')
-        def x = Vorgang.findAllByBezeichnungRlikeAndOeffentlich(q, true, params)
-        def y = Vorgang.findAllByBeschreibungRlikeAndOeffentlich(q, true, params)
+
+        def x, y
+
+        if (!(springSecurityService.currentUser instanceof kit.Benutzer)) {
+            x = Vorgang.findAllByBezeichnungRlikeAndOeffentlich(q, true, params)
+            y = Vorgang.findAllByBeschreibungRlikeAndOeffentlich(q, true, params)
+        } else {
+            x = Vorgang.findAllByBezeichnungRlike(q, params)
+            y = Vorgang.findAllByBeschreibungRlike(q, params)
+        }
+
         def z = ((x + y).sort { it.lastUpdated.time }.reverse()) as Set
         if(q){
             flash.message = "Ergebnis für Suchwort '$q'"
@@ -126,7 +154,12 @@ class VorgangController {
         params.max = 100
         params.sort = "dateCreated"
         params.order = "desc"
-        respond Vorgang.findAllByOeffentlich(true, params), model: [vorgangCount: Vorgang.countByOeffentlich(true)]
+
+        if (!(springSecurityService.currentUser instanceof kit.Benutzer)){
+            respond Vorgang.findAllByOeffentlich(true, params), model: [vorgangCount: Vorgang.countByOeffentlich(true)]
+        }else{
+            respond Vorgang.findAll( params), model: [vorgangCount: Vorgang.countByOeffentlich(true)]
+        }
     }
 
 
@@ -160,12 +193,6 @@ class VorgangController {
         Vorgang vorgang = Vorgang.get(params.id)
         if (vorgang == null) {
             notFound()
-            return
-        }
-
-        if(params.q!="on"){
-            flash.message = "Sie müssen bestätigen, dass Sie ein echter Mensch sind!"
-            redirect action:'show', id: vorgang.id, params: params
             return
         }
 

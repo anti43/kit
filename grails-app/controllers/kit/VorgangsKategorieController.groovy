@@ -1,5 +1,6 @@
 package kit
 
+import grails.plugin.springsecurity.SpringSecurityService
 import grails.plugin.springsecurity.annotation.Secured
 import grails.validation.ValidationException
 import org.springframework.security.core.context.SecurityContextHolder
@@ -9,6 +10,7 @@ import static org.springframework.http.HttpStatus.*
 class VorgangsKategorieController {
 
     VorgangsKategorieService vorgangsKategorieService
+    SpringSecurityService springSecurityService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
@@ -22,6 +24,9 @@ class VorgangsKategorieController {
         }
 
         def gf = Vorgang.createCriteria().list {
+            if (!(springSecurityService.currentUser instanceof kit.Benutzer)) {
+                eq("oeffentlich", true)
+            }
             kategorien {
                 'in'('name', [id])
             }

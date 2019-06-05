@@ -115,9 +115,8 @@
             <div class="card-body">
                 <g:form action="comment" id="${vorgang.id}">
                     <div class="form-group">
-                        Ihr Name (optional): <input name="name" type="text" value="${params.name?:''}"/><br>
-                        Ich bin ein Mensch: <input required type="checkbox" name="q" ><br>
-                        Kommentar: <textarea name="text" class="form-control nomce" rows="3" value="${params.text?:''}"></textarea>
+                        Ihr Name: <input required name="name" type="text" value="${params.name?:''}"/><br>
+                        Kommentar: <textarea required name="text" class="form-control nomce" rows="3" value="${params.text?:''}"></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary">Absenden</button>
                 </g:form>

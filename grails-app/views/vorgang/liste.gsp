@@ -20,7 +20,11 @@
             </ul>
         </div>
         <div id="list-vorgang" class="content scaffold-list" role="main">
+<g:if test="${!(springSecurityService?.currentUser instanceof kit.Benutzer)}">
             <h1>Öffentliche Vorgänge</h1>
+</g:if><g:else>
+            <h1>Öffentliche und Nicht-Öffentliche Vorgänge</h1>
+        </g:else>
             <p>&nbsp;</p>
             <g:if test="${flash.message}">
                 <div class="alert alert-info" role="status">${flash.message}</div>

@@ -7,7 +7,14 @@
 
 <body>
 <g:set var="springSecurityService" bean="springSecurityService"/>
-<g:set var="vorgangList" value="${kit.Vorgang.findAllByOeffentlich( true, [max: 10]).sort {it.lastUpdated.time}.reverse()}"/>
+
+<g:if test="${!(springSecurityService.currentUser instanceof kit.Benutzer)}">
+    <g:set var="vorgangList" value="${kit.Vorgang.findAllByOeffentlich( true, [max: 10]).sort {it.lastUpdated.time}.reverse()}"/>
+</g:if>
+<g:else>
+    <g:set var="vorgangList" value="${kit.Vorgang.findAll( [max: 100]).sort {it.lastUpdated.time}.reverse()}"/>
+</g:else>
+
 <!-- Post Content Column -->
 <div class="col-lg-8">
     <h1 class="mt-4">KIT - Kommunale Intelligenz und Transparenz</h1>
@@ -33,6 +40,7 @@
         <th>Id</th>
         <th>Aktualisiert am</th>
         <th>Bezeichnung</th>
+        <th>Zuständigkeit</th>
         <th>Status</th>
         <th>Anzeigen</th>
         </thead>
@@ -42,6 +50,7 @@
                 <td><a href="/vorgang/show/${it.id}">${it.id}</a></td>
                 <td>${it.lastUpdated.format('dd.MM.yyyy')}</td>
                 <td>${it.bezeichnung}</td>
+                <td>${it.werIstZustaendig}</td>
                 <td>${it.status}</td>
                 <td><a class="btn btn-success" href="/vorgang/show/${it.id}">Anzeigen</a></td>
             </tr>
@@ -80,6 +89,25 @@
     </div>
 
     <!-- Categories Widget -->
+    <div class="card my-4">
+        <h5 class="card-header">Zuständigkeit</h5>
+
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-10">
+                    <ul class="list-unstyled mb-0">
+
+                        <g:each in="${["Alle", "Gemeinderat", "Ortsrat", "Sonstiges"]}">
+                            <li>
+                                <a href="/vorgang/zustaendigkeit/${it}">${it}</a>
+                            </li>
+                        </g:each>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="card my-4">
         <h5 class="card-header">Kategorien</h5>
 

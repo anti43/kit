@@ -24,6 +24,9 @@ class GemeindeteilController {
         }
 
         List gf = Vorgang.createCriteria().list {
+            if (!(springSecurityService.currentUser instanceof kit.Benutzer)) {
+                eq("oeffentlich", true)
+            }
             ortschaften {
                 'in'('name', [id])
             }
