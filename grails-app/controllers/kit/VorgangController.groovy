@@ -188,6 +188,11 @@ class VorgangController {
     }
 
     @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
+    def print(Vorgang vorgang){
+        [vorgang: vorgang]
+    }
+
+    @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
     def comment() {
         log.info(params as String)
         Vorgang vorgang = Vorgang.get(params.id)

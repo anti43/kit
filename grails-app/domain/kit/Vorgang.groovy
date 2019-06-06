@@ -1,8 +1,5 @@
 package kit
 
-
-import org.springframework.security.core.context.SecurityContextHolder
-
 class Vorgang {
 
     Date dateCreated
@@ -90,5 +87,14 @@ class Vorgang {
 
     static String getLocalProperty(String key){
         return System.getenv(key)?:System.getProperty(key)?:'nullinger'
+    }
+
+    String getBadgeClass() {
+        if (status == 'Neu') return "primary"
+        if (status == 'Wartend') return "secondary"
+        if (status == 'Angenommen') return "success"
+        if (status == 'Abgelehnt') return "danger"
+        if (status == 'Wird diskutiert') return "warning"
+        return "info"
     }
 }

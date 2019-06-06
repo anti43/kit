@@ -43,9 +43,9 @@
                     </select>
                     </div>
                 </fieldset>
-                <fieldset class="buttons">
-                    <g:submitButton name="create" class="save" value="${message(code: 'default.button.create.label', default: 'Create')}" />
-                </fieldset>
+                <p align="center">
+                    <input type="submit" value="Speichern" class="btn btn-success centered" />
+                </p>
             </g:form>
         </div>
     </body>

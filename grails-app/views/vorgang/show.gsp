@@ -15,6 +15,7 @@
                 <li><g:link class="list" action="index"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
                 <li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
 </g:if>
+                <li><g:link target="_blank" action="print" id="${vorgang.id}">Druckansicht</g:link></li>
             </ul>
         </div>
 
@@ -25,88 +26,7 @@
 
     <!-- Post Content Column -->
     <div class="col-lg-8">
-        <h1 class="mt-4">${vorgang.bezeichnung}</h1>
-        <g:if test="${(!vorgang.initiatorVerstecken) && vorgang.vorschlagVon}">
-            <p class="lead">
-                von
-                <a href="#">${vorgang.vorschlagVon}</a>
-            </p>
-        </g:if>
-        <g:if test="${vorgang.antragEingereichtAm && !vorgang.antragEntschiedenAm}">
-            <div class="alert alert-success">
-                <h2>Antrag im zuständigen Gremium eingreicht</h2>
-                <blockquote >
-                    <p class="mb-0">
-                        am&nbsp;${vorgang.antragEingereichtAm.format('dd.MM.yyyy')}
-                    </p>
-                </blockquote>
-            </div>
-        </g:if>
-
-
-        <g:if test="${vorgang.antragEntschiedenAm}">
-
-            <%
-                def cssclass = 'danger'
-                if(vorgang.status?.contains('Angenommen')){
-                    cssclass = 'success'
-                }
-            %>
-            <div class="alert alert-${cssclass}">
-         <h2>Entscheidung bereits getroffen</h2>
-         <blockquote >
-             <p class="mb-0">
-                    am&nbsp;${vorgang.antragEntschiedenAm.format('dd.MM.yyyy')}
-                </p>
-             <p>  <p>Ergebnis: <b>${vorgang.status}</b></p></p>
-            </blockquote>
-            </div>
-        </g:if>
-<g:else>
-    <!-- Date/Time -->
-    <div class="alert alert-info">
-        <p>Erstellt: ${vorgang.dateCreated.format("dd.MM.yyyy")}</p>
-        <p>Zuletzt bearbeitet: ${vorgang.lastUpdated.format("dd.MM.yyyy")}</p>
-        <p>Aktueller Status: <b>${vorgang.status}</b></p>
-        <p>Zuständigkeit: <b>${vorgang.werIstZustaendig}</b></p>
-    </div>
-
-
-</g:else>
-
-
-        <!-- Preview Image -->
-        <g:if test="${(vorgang.bilder)}">
-            <img style="max-height: 300px;" class="img-fluid rounded" src="/dateiAnhang/render/${vorgang.bilder.sort{it.id}.last().id}" alt="">
-            <hr>
-        </g:if>
-
-
-        <!-- Post Content -->
-        <% if(vorgang.beschreibung){%>
-        <h2>Beschreibung</h2>
-        ${vorgang.beschreibung.encodeAsRaw()}
-
-        <%}%>
-
-        <% if(vorgang.bemerkungen){%>
-        <h2>Bemerkungen</h2>
-        <blockquote >
-            <p class="mb-0">
-                ${vorgang.bemerkungen.encodeAsRaw()}
-            </p>
-        </blockquote>
-        <%}%>
-
-
-         <g:if test="${vorgang.begründung}">
-             <h2>Begründung der Entscheidung</h2>
-             <blockquote >
-                 <p class="mb-0">
-                     ${vorgang.begründung.encodeAsRaw()}
-                 </p>
-             </blockquote>
-         </g:if>
+        <g:render template="details"/>
         <hr>
         <!-- Comments Form -->
         <div class="card my-4">
@@ -115,8 +35,9 @@
             <div class="card-body">
                 <g:form action="comment" id="${vorgang.id}">
                     <div class="form-group">
-                        Ihr Name: <input required name="name" type="text" value="${params.name?:''}"/><br>
-                        Kommentar: <textarea required name="text" class="form-control nomce" rows="3" value="${params.text?:''}"></textarea>
+                        Ihr Name: <input required name="name" type="text" value="${params.name ?: ''}"/><br>
+                        Kommentar: <textarea required name="text" class="form-control nomce" rows="3"
+                                             value="${params.text ?: ''}"></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary">Absenden</button>
                 </g:form>
@@ -124,21 +45,21 @@
         </div>
         <g:if test="${kit.VorgangsKommentar.countByVorgangAndVeroeffentlicht(vorgang, true)}">
 
+            <h2>Kommentare:</h2><br>
+            <g:each in="${kit.VorgangsKommentar.findAllByVorgangAndVeroeffentlicht(vorgang, true)}">
+                <!-- Single Comment -->
+                <div class="media mb-4">
+                    <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
 
-        <h2>Kommentare:</h2><br>
-         <g:each in="${kit.VorgangsKommentar.findAllByVorgangAndVeroeffentlicht(vorgang, true)}">
-             <!-- Single Comment -->
-             <div class="media mb-4">
-                 <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
-
-                 <div class="media-body">
-                     <h5 class="mt-0">${it.benutzer}</h5>
-                     <h6 class="mt-0">${it.dateCreated.format("dd.MM.yyyy")}</h6>
-                     ${it.text.encodeAsRaw()}
-                          </div>
-             </div>
-        </g:each>
+                    <div class="media-body">
+                        <h5 class="mt-0">${it.benutzer}</h5>
+                        <h6 class="mt-0">${it.dateCreated.format("dd.MM.yyyy")}</h6>
+                        ${it.text.encodeAsRaw()}
+                    </div>
+                </div>
+            </g:each>
         </g:if>
+
     </div>
 
 

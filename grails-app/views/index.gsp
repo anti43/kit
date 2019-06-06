@@ -51,7 +51,9 @@
                 <td>${it.lastUpdated.format('dd.MM.yyyy')}</td>
                 <td>${it.bezeichnung}</td>
                 <td>${it.werIstZustaendig}</td>
-                <td>${it.status}</td>
+                <td><span class="badge badge-${it.getBadgeClass()}">
+                    ${it.status}
+                </span></td>
                 <td><a class="btn btn-success" href="/vorgang/show/${it.id}">Anzeigen</a></td>
             </tr>
         </g:each>

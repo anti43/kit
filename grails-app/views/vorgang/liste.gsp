@@ -62,7 +62,11 @@
                             <td><a href="/vorgang/show/${it.id}">${it.id}</a></td>
                             <td>${it.lastUpdated.format('dd.MM.yyyy')}</td>
                             <td>${it.bezeichnung}</td>
-                            <td>${it.status}</td>
+                            <td>
+                                <span class="badge badge-${it.getBadgeClass()}">
+                                ${it.status}
+                                </span>
+                            </td>
                             <td>${it.oeffentlich}</td>
                             <td><a class="btn btn-success" href="/vorgang/show/${it.id}">Anzeigen</a></td>
                         </tr>
