@@ -17,6 +17,7 @@ class Vorgang {
 
     Date antragEingereichtAm
     Date antragEntschiedenAm
+    Vorgang ersetztVon
 
 
     static hasMany = [bilder: DateiAnhang, kategorien: VorgangsKategorie, ortschaften: Gemeindeteil]
@@ -27,6 +28,7 @@ class Vorgang {
 
 
     static constraints = {
+        ersetztVon nullable: true
         bezeichnung()
         beschreibung widget: 'textarea', nullable: true
         bemerkungen widget: 'textarea', nullable: true

@@ -5,6 +5,14 @@
         <a href="#">${vorgang.vorschlagVon}</a>
     </p>
 </g:if>
+
+<g:if test="${(vorgang.ersetztVon)}">
+    <p class="lead">
+        Ersetzt durch anderen Vorgang:
+        <a href="/vorgang/show/${vorgang.ersetztVon.id}">${vorgang.ersetztVon}</a>
+    </p>
+</g:if>
+
 <g:if test="${vorgang.antragEingereichtAm && !vorgang.antragEntschiedenAm}">
     <div class="alert alert-success">
         <h2>Antrag im zuständigen Gremium eingreicht</h2>

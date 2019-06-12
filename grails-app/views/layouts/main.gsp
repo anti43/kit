@@ -11,6 +11,9 @@
     <asset:link rel="icon" href="favicon.ico" type="image/x-ico"/>
 
     <asset:stylesheet src="application.css"/>
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/chosen/1.1.0/chosen.min.css">
+
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.7.4/skins/lightgray/skin.min.css"/>
     <link rel="stylesheet"
@@ -25,7 +28,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.7.4/plugins/image/plugin.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.7.4/plugins/imagetools/plugin.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.7.4/plugins/paste/plugin.min.js"></script>
-
+<!-- JS -->
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/chosen/1.1.0/chosen.jquery.min.js"></script>
 
 </head>
 
@@ -125,6 +129,8 @@
             "searching": false,
             "ordering": false
         });
+
+        $("select").chosen();
     });
 </script>
 </body>
