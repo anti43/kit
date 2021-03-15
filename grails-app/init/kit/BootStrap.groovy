@@ -90,7 +90,7 @@ class BootStrap {
         if(Faq.count == 0){
             Faq f = new Faq()
             f.frage="Was ist das hier?"
-            f.antwort="Das Bürgerinformationsportal der Fraktion der Grünen im Gemeinderat Perl/OV Grüne Perl"
+            f.antwort="Das Bürgerinformationsportal"
             f.save(flush: true, failOnError: true)
 
             Faq f2 = new Faq()
@@ -109,7 +109,7 @@ class BootStrap {
         if(Impressum.count==0){
             Impressum i = new Impressum()
             i.bezeichnung = "Inhaltlich Verantwortlicher"
-            i.text = "Bündnis90/Die Grünen OV Perl, vertreten durch Andreas Weber"
+            i.text = ""
             i.save(flush: true, failOnError: true)
         }
 
