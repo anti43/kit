@@ -112,6 +112,8 @@ class BootStrap {
             i.text = "Bündnis90/Die Grünen OV Perl, vertreten durch Andreas Weber"
             i.save(flush: true, failOnError: true)
         }
+
+
     }
     def destroy = {
     }
