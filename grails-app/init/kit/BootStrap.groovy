@@ -55,22 +55,7 @@ class BootStrap {
         }
 
         if(Gemeindeteil.count==0){
-            ["Alle",
-             "Gemeinde",
-             "Besch" ,
-             "Borg",
-             "Büschdorf",
-             "Eft-Hellendorf",
-             "Keßlingen",
-             "Münzingen",
-             "Nennig",
-             "Oberleuken",
-             "Oberperl",
-             "Perl",
-             "Sehndorf",
-             "Sinz",
-             "Tettingen-Butzdorf",
-             "Wochern"].each{
+            ["Alle"].each{
                 Gemeindeteil g = new Gemeindeteil()
                 g.name = it
                 g.save(flush: true, failOnError: true)
@@ -96,7 +81,7 @@ class BootStrap {
             Faq f2 = new Faq()
             f2.frage="Was passiert mit meinem Anliegen?"
             f2.antwort="Wir prüfen jedes Anliegen sehr gewissenhaft und entscheiden dann, " +
-                    "ob wir als Fraktion im Gemeindderat einen entsprechenden Antrag stellen/tätig werden. " +
+                    "ob wir als Fraktion im Gemeinderat einen entsprechenden Antrag stellen/tätig werden. " +
                     "Wir behalten uns vor, den Antrag umzuformulieren."
             f2.save(flush: true, failOnError: true)
 
